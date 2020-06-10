@@ -1,4 +1,4 @@
-# project/__init__.py
+# services/users/project/__init__.py
 
 
 import os
@@ -7,11 +7,14 @@ from flask import Flask
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt  # new
+
 
 # instantiate the extensions
 db = SQLAlchemy()
+cors = CORS()
+bcrypt = Bcrypt()  # new
 admin = Admin(template_mode="bootstrap3")
-cors = CORS()  # new
 
 
 def create_app(script_info=None):
@@ -25,7 +28,8 @@ def create_app(script_info=None):
 
     # set up extensions
     db.init_app(app)
-    cors.init_app(app, resources={r"*": {"origins": "*"}})  # new
+    cors.init_app(app, resources={r"*": {"origins": "*"}})
+    bcrypt.init_app(app)  # new
     if os.getenv("FLASK_ENV") == "development":
         admin.init_app(app)
 

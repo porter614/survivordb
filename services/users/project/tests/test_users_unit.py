@@ -13,7 +13,7 @@ def test_add_user(test_app, monkeypatch):
     def mock_get_user_by_email(email):
         return None
 
-    def mock_add_user(username, email):
+    def mock_add_user(username, email, password):
         return True
 
     monkeypatch.setattr(
@@ -24,7 +24,13 @@ def test_add_user(test_app, monkeypatch):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps({"username": "michael", "email": "michael@testdriven.io"}),
+        data=json.dumps(
+            {
+                "username": "michael",
+                "email": "michael@testdriven.io",
+                "password": "password1",
+            }
+        ),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -56,7 +62,7 @@ def test_add_user_duplicate_email(test_app, monkeypatch):
     def mock_get_user_by_email(email):
         return True
 
-    def mock_add_user(username, email):
+    def mock_add_user(username, email, password):
         return True
 
     monkeypatch.setattr(
@@ -66,12 +72,24 @@ def test_add_user_duplicate_email(test_app, monkeypatch):
     client = test_app.test_client()
     client.post(
         "/users",
-        data=json.dumps({"username": "michael", "email": "michael@testdriven.io"}),
+        data=json.dumps(
+            {
+                "username": "michael",
+                "email": "michael@testdriven.io",
+                "password": "password1",
+            }
+        ),
         content_type="application/json",
     )
     resp = client.post(
         "/users",
-        data=json.dumps({"username": "michael", "email": "michael@testdriven.io"}),
+        data=json.dumps(
+            {
+                "username": "michael",
+                "email": "michael@testdriven.io",
+                "password": "password1",
+            }
+        ),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -85,6 +103,7 @@ def test_single_user(test_app, monkeypatch):
             "id": 1,
             "username": "jeffrey",
             "email": "jeffrey@testdriven.io",
+            "password": "password1",
             "created_date": datetime.now(),
         }
 
@@ -95,6 +114,7 @@ def test_single_user(test_app, monkeypatch):
     assert resp.status_code == 200
     assert "jeffrey" in data["username"]
     assert "jeffrey@testdriven.io" in data["email"]
+    assert "password" not in data  # new
 
 
 def test_single_user_incorrect_id(test_app, monkeypatch):
@@ -116,12 +136,14 @@ def test_all_users(test_app, monkeypatch):
                 "id": 1,
                 "username": "michael",
                 "email": "michael@mherman.org",
+                "password": "password1",
                 "created_date": datetime.now(),
             },
             {
                 "id": 1,
                 "username": "fletcher",
                 "email": "fletcher@notreal.com",
+                "password": "password1",
                 "created_date": datetime.now(),
             },
         ]
@@ -136,6 +158,8 @@ def test_all_users(test_app, monkeypatch):
     assert "michael@mherman.org" in data[0]["email"]
     assert "fletcher" in data[1]["username"]
     assert "fletcher@notreal.com" in data[1]["email"]
+    assert "password" not in data[0]  # new
+    assert "password" not in data[1]  # new
 
 
 def test_remove_user(test_app, monkeypatch):
@@ -151,6 +175,7 @@ def test_remove_user(test_app, monkeypatch):
                 "id": 1,
                 "username": "user-to-be-removed",
                 "email": "remove-me@testdriven.io",
+                "password": "password1",
             }
         )
         return d
@@ -198,7 +223,9 @@ def test_update_user(test_app, monkeypatch):
     client = test_app.test_client()
     resp_one = client.put(
         "/users/1",
-        data=json.dumps({"username": "me", "email": "me@testdriven.io"}),
+        data=json.dumps(
+            {"username": "me", "email": "me@testdriven.io", "password": "password1"}
+        ),
         content_type="application/json",
     )
     data = json.loads(resp_one.data.decode())
