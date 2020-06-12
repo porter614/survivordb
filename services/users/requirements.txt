@@ -7,3 +7,4 @@ psycopg2-binary==2.8.4
 werkzeug==0.16.1
 flask-cors==3.0.8
 flask-bcrypt==0.7.1
+pyjwt==1.7.1
