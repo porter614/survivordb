@@ -7,6 +7,8 @@ from flask.cli import FlaskGroup
 
 from project import create_app, db
 from project.api.users.models import User
+from project.api.contestants.models import Contestant
+from project.api.appearances.models import Appearance
 
 
 app = create_app()
@@ -28,6 +30,23 @@ def seed_db():
     db.session.add(
         User(username="michaelherman", email="michael@mherman.org", password="password")
     )
+    db.session.commit()
+
+
+@cli.command("seed_survivor")
+def seed_survivor():
+    contestant = Contestant(name="Tony Vlachos", occupation="Cop")
+    cagayan_appearance = Appearance()
+    game_changers_appearance = Appearance()
+    winners_at_war_appearance = Appearance()
+
+    contestant.appearances.append(cagayan_appearance)
+    contestant.appearances.append(game_changers_appearance)
+    contestant.appearances.append(winners_at_war_appearance)
+
+    db.session.add(contestant)
+    db.session.add(cagayan_appearance)
+
     db.session.commit()
 
 
