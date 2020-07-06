@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import About from "./components/About";
+import Contestants from "./components/ContestantsTable";
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import UsersList from "./components/UsersList";
@@ -8,6 +9,8 @@ import AddUser from "./components/AddUser";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import UserStatus from "./components/UserStatus";
+import "./App.css";
+import ContestantsProfile from "./components/ContestantProfile";
 
 class App extends Component {
   constructor() {
@@ -15,9 +18,10 @@ class App extends Component {
 
     this.state = {
       users: [],
+      appearances: [],
       username: "",
       email: "",
-      title: "Survivor.db" // new
+      title: "Survivor.db",
     };
 
     this.addUser = this.addUser.bind(this);
@@ -30,15 +34,27 @@ class App extends Component {
 
   componentDidMount() {
     this.getUsers();
+    this.getAppearances();
   }
 
   getUsers() {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
-      .then(res => {
+      .then((res) => {
         this.setState({ users: res.data });
       })
-      .catch(err => {
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getAppearances() {
+    axios
+      .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/appearances`)
+      .then((res) => {
+        this.setState({ appearances: res.data });
+      })
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -47,10 +63,10 @@ class App extends Component {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
     axios
       .post(url, data)
-      .then(res => {
+      .then((res) => {
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -59,12 +75,12 @@ class App extends Component {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/login`;
     axios
       .post(url, data)
-      .then(res => {
+      .then((res) => {
         this.setState({ accessToken: res.data.access_token });
         this.getUsers();
         window.localStorage.setItem("refreshToken", res.data.refresh_token); // new
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -81,15 +97,15 @@ class App extends Component {
     if (token) {
       axios
         .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/auth/refresh`, {
-          refresh_token: token
+          refresh_token: token,
         })
-        .then(res => {
+        .then((res) => {
           this.setState({ accessToken: res.data.access_token });
           this.getUsers();
           window.localStorage.setItem("refreshToken", res.data.refresh_token);
           return true;
         })
-        .catch(err => {
+        .catch((err) => {
           return false;
         });
     }
@@ -106,16 +122,16 @@ class App extends Component {
 
     const data = {
       username: this.state.username,
-      email: this.state.email
+      email: this.state.email,
     };
 
     axios
       .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
-      .then(res => {
+      .then((res) => {
         this.getUsers();
         this.setState({ username: "", email: "" });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -125,6 +141,7 @@ class App extends Component {
     obj[event.target.name] = event.target.value;
     this.setState(obj);
   }
+
   render() {
     return (
       <div>
@@ -134,9 +151,9 @@ class App extends Component {
           isAuthenticated={this.isAuthenticated} // new
         />
         <section className="section">
-          <div className="container">
-            <div className="columns">
-              <div className="column is-half">
+          <div>
+            <div>
+              <div>
                 <br />
                 <Switch>
                   <Route
@@ -160,7 +177,13 @@ class App extends Component {
                       </div>
                     )}
                   />
-                  <Route exact path="/about" component={About} />
+                  <Route
+                    exact
+                    path="/players"
+                    render={() => (
+                      <Contestants appearances={this.state.appearances} />
+                    )}
+                  />
                   <Route
                     exact
                     path="/register"
@@ -190,6 +213,10 @@ class App extends Component {
                         isAuthenticated={this.isAuthenticated}
                       />
                     )}
+                  />
+                  <Route
+                    path="/contestant/:id"
+                    component={ContestantsProfile}
                   />
                 </Switch>
               </div>

@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
     "formik": "^2.1.4",
+    "material-table": "^1.63.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
+    "react-scripts": "^3.4.0",
+    "react-sigma": "^1.2.34",
     "yup": "^0.28.1"
   },
   "scripts": {

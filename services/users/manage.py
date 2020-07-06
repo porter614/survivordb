@@ -9,7 +9,18 @@ from project import create_app, db
 from project.api.users.models import User
 from project.api.contestants.models import Contestant
 from project.api.appearances.models import Appearance
-
+from project.api.idols.models import Idol
+from tools.goliath import (
+    generate_appearances,
+    fetch_contestant_photos_wikia,
+    generate_contestant_image_link,
+    fetch_season_logos,
+    upload_season_logos_s3,
+    generate_profile_image_link,
+    get_contestant_personal_data,
+    generate_idols,
+)
+from tools.goliath import download_season_data
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
@@ -35,19 +46,56 @@ def seed_db():
 
 @cli.command("seed_survivor")
 def seed_survivor():
-    contestant = Contestant(name="Tony Vlachos", occupation="Cop")
-    cagayan_appearance = Appearance()
-    game_changers_appearance = Appearance()
-    winners_at_war_appearance = Appearance()
+    appearances = generate_appearances()
+    idols = generate_idols()
 
-    contestant.appearances.append(cagayan_appearance)
-    contestant.appearances.append(game_changers_appearance)
-    contestant.appearances.append(winners_at_war_appearance)
+    for contestant_name, appearance in appearances:
+        print(contestant_name)
 
-    db.session.add(contestant)
-    db.session.add(cagayan_appearance)
+        contestant = Contestant.query.filter_by(name=contestant_name).first()
+        if not contestant:
+            personal_data = get_contestant_personal_data(contestant_name)
+
+            contestant = Contestant(
+                name=contestant_name,
+                image_link=generate_contestant_image_link(contestant_name),
+                profile_image_link=generate_profile_image_link(contestant_name),
+            )
+            if personal_data:
+                for occupation in personal_data[1]:
+                    contestant.occupation = occupation
+                contestant.birthdate = personal_data[0]
+                contestant.hometown = personal_data[2]
+
+            db.session.add(contestant)
+
+        # could optimize
+        for idol in idols:
+            if idol.finder == contestant_name and str(idol.season) == str(
+                appearance.season
+            ):
+                appearance.idols.append(idol)
+                db.session.add(idol)
+
+        contestant.appearances.append(appearance)
+        db.session.add(appearance)
 
     db.session.commit()
+
+
+# @cli.command("download_survivor")
+# def cli_download_season_data():
+#     download_season_data()
+
+
+@cli.command("fetch_photos")
+def fetch_photos():
+    appearances = generate_appearances()
+
+
+# @cli.command("fetch_logos")
+# def fetch_logos():
+#     upload_season_logos_s3()
 
 
 if __name__ == "__main__":

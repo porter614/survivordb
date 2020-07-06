@@ -5,15 +5,24 @@ import React from "react";
 import "./NavBar.css"; // new
 
 const titleStyle = {
-  fontWeight: "bold"
+  fontWeight: "bold",
 };
 
-const NavBar = props => {
+const NavBar = (props) => {
   let menu = (
     <div className="navbar-menu">
       <div className="navbar-start">
-        <Link to="/about" className="navbar-item" data-testid="nav-about">
-          About
+        <Link to="/seasons" className="navbar-item" data-testid="nav-about">
+          Seasons
+        </Link>
+        <Link to="/players" className="navbar-item" data-testid="nav-about">
+          Players
+        </Link>
+        <Link to="/profile" className="navbar-item" data-testid="nav-about">
+          Player Profile
+        </Link>
+        <Link to="/graph" className="navbar-item" data-testid="nav-about">
+          Graph
         </Link>
       </div>
       <div className="navbar-end">
@@ -30,8 +39,8 @@ const NavBar = props => {
     menu = (
       <div className="navbar-menu">
         <div className="navbar-start">
-          <Link to="/about" className="navbar-item" data-testid="nav-about">
-            About
+          <Link to="/players" className="navbar-item" data-testid="nav-about">
+            Players
           </Link>
           <Link to="/status" className="navbar-item" data-testid="nav-status">
             User Status
@@ -83,7 +92,7 @@ const NavBar = props => {
 NavBar.propTypes = {
   title: PropTypes.string.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default NavBar;
