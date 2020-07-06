@@ -1,3 +1,7 @@
-# Authentication with Flask, React, and Docker
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-[![pipeline status](https://gitlab.com/porter614/flask-react-auth/badges/master/pipeline.svg)](https://gitlab.com/porter614/flask-react-auth/commits/master)
+## Survivor Database
+
+Attempt to organize, analyze, and display data from the hit reality TV series `Survivor` started in 2001.
+
+![alt text](https://survivordb.s3-us-west-2.amazonaws.com/1.jpg)
