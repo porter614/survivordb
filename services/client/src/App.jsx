@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import About from "./components/About";
-import Contestants from "./components/ContestantsTable";
+import ContestantsTable from "./components/ContestantsTable";
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import UsersList from "./components/UsersList";
@@ -11,6 +11,7 @@ import RegisterForm from "./components/RegisterForm";
 import UserStatus from "./components/UserStatus";
 import "./App.css";
 import ContestantsProfile from "./components/ContestantProfile";
+import ContestantGraph from "./components/ContestantGraph";
 
 class App extends Component {
   constructor() {
@@ -19,9 +20,10 @@ class App extends Component {
     this.state = {
       users: [],
       appearances: [],
+      careers: [],
       username: "",
       email: "",
-      title: "Survivor.db",
+      title: "SurvivorDB",
     };
 
     this.addUser = this.addUser.bind(this);
@@ -35,13 +37,14 @@ class App extends Component {
   componentDidMount() {
     this.getUsers();
     this.getAppearances();
+    this.getCareers();
   }
 
   getUsers() {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
       .then((res) => {
-        this.setState({ users: res.data });
+        this.setState((s) => ({ ...this.state, users: res.data }));
       })
       .catch((err) => {
         console.log(err);
@@ -52,7 +55,18 @@ class App extends Component {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/appearances`)
       .then((res) => {
-        this.setState({ appearances: res.data });
+        this.setState((s) => ({ ...this.state, appearances: res.data }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getCareers() {
+    axios
+      .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/contestants/careers`)
+      .then((res) => {
+        this.setState((s) => ({ ...this.state, careers: res.data }));
       })
       .catch((err) => {
         console.log(err);
@@ -150,7 +164,15 @@ class App extends Component {
           logoutUser={this.logoutUser}
           isAuthenticated={this.isAuthenticated} // new
         />
-        <section className="section">
+        <section
+          className="section"
+          style={{
+            backgroundImage:
+              'url("https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg")',
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        >
           <div>
             <div>
               <div>
@@ -181,7 +203,17 @@ class App extends Component {
                     exact
                     path="/players"
                     render={() => (
-                      <Contestants appearances={this.state.appearances} />
+                      <ContestantsTable
+                        appearances={this.state.appearances}
+                        careers={this.state.careers}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/graph"
+                    render={() => (
+                      <ContestantGraph appearances={this.state.appearances} />
                     )}
                   />
                   <Route

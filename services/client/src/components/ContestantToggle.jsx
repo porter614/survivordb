@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { Link } from "react-router-dom";
+import ExtraContestantStatistic from "./ContestantKeyValue";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,16 +63,6 @@ const nth = {
   20: "20th",
 };
 
-const ExtraContestantStatistic = (props) => {
-  const classes = useStyles();
-  return (
-    <Grid item xs={4} direction="column" spacing={0}>
-      <Typography className={classes.extraStatKey}>{props.stat}:</Typography>
-      <Typography className={classes.extraStatValue}>{props.value}</Typography>
-    </Grid>
-  );
-};
-
 const ContestantToggle = (props) => {
   const classes = useStyles();
   return (
@@ -102,45 +93,55 @@ const ContestantToggle = (props) => {
                 </Typography>
               </Grid>
               <ExtraContestantStatistic
+                size={4}
                 stat="Days on the Island"
                 value={props.appearance.daysPlayed}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Challenge Appearances"
                 value={props.appearance.challengeAppearances}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Immunity Challenge Appearances"
                 value={props.appearance.immunityChallengeAppearances}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Immunity Challenge Wins"
                 value={props.appearance.immunityChallengeWins}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Reward Challenge Appearances"
                 value={props.appearance.rewardChallengeAppearances}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Reward Challenge Wins"
                 value={props.appearance.rewardChallengeWins}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Individual Reward Challenge Wins"
                 value={props.appearance.individualRewardChallengeWins}
               />
               <ExtraContestantStatistic
+                size={4}
                 stat="Votes Cast at Tribals with this player"
                 value={props.appearance.totalVotesCast}
               />
               <Grid item xs={12}>
-                <ButtonBase>
-                  <Link to={`/contestant/${props.appearance.contestant_id}`}>
-                    <Typography style={{ cursor: "pointer" }}>
-                      Player Career Profile
-                    </Typography>
-                  </Link>
-                </ButtonBase>
+                <div align="center">
+                  <ButtonBase>
+                    <Link to={`/contestant/${props.appearance.contestant_id}`}>
+                      <Typography style={{ cursor: "pointer" }}>
+                        Player Career Profile
+                      </Typography>
+                    </Link>
+                  </ButtonBase>
+                </div>
               </Grid>
             </Grid>
           </Grid>

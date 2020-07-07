@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { forwardRef } from "react";
+import axios from "axios";
 
 import PropTypes from "prop-types";
 
-import MaterialTable from "material-table";
+import MaterialTable, { MTableToolbar } from "material-table";
+
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -22,8 +25,11 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import { Paper } from "@material-ui/core";
+import { Paper, Chip } from "@material-ui/core";
 import ContestantToggle from "./ContestantToggle";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,25 +57,42 @@ const tableIcons = {
 
 function calculateAge(birthday) {
   // birthday is a date
-  console.log(birthday);
   var ageDifMs = Date.now() - Date.parse(birthday);
   var ageDate = new Date(ageDifMs); // miliseconds from epoch
-  console.log(ageDate);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    width: 325,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 const headCells = [
   {
-    field: "image_link",
+    field: "profile_image_link",
     title: "Avatar",
     render: (rowData) => (
       <img
-        src={rowData.image_link}
+        src={rowData.profile_image_link}
         border="1px solid"
         box-shadow="50px 50px 113px"
-        style={{ width: 100, borderColor: "#74c7e3" }}
+        transition="all .2s ease"
+        vertical-align="middle"
+        style={{
+          zoom: "150%",
+          height: "50",
+          width: "150",
+          borderColor: "#74c7e3",
+          borderRadius: "50%",
+        }}
       />
     ),
+    grouping: false,
   },
   {
     field: "contestant",
@@ -78,12 +101,6 @@ const headCells = [
     title: "Name",
     customFilterAndSearch: (term, rowData) =>
       rowData.contestant.toLowerCase().includes(term.toLowerCase()),
-  },
-  {
-    field: "season",
-    numeric: false,
-    disablePadding: true,
-    title: "Season",
   },
   {
     field: "birthdate",
@@ -105,9 +122,14 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     title: "Occupation",
-    render: (rowData) => rowData.occupations.replace(";", ","),
+    render: (rowData) => rowData.occupations.join(),
     customFilterAndSearch: (term, rowData) =>
-      rowData.occupations.toLowerCase().includes(term.toLowerCase()),
+      rowData.occupations
+        .join()
+        .toLowerCase()
+        .includes(term.toLowerCase()),
+    customSort: (a, b) => a.occupations.length - b.occupations.length,
+    group: false,
   },
   {
     field: "challengeWins",
@@ -130,16 +152,6 @@ const headCells = [
     disablePadding: false,
     title: "Challenge Sit Outs",
   },
-  // {
-  //   field: "challengeWinPercentage",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   title: "Challenge Win Percentage",
-  //   customFilterAndSearch: (term, rowData) =>
-  //     term <= rowData.challengeWinPercentage,
-  //   render: (rowData) =>
-  //     (rowData.challengeWinPercentage * 100).toFixed(0).toString() + "%",
-  // },
   {
     field: "tribalCouncilAppearances",
     numeric: true,
@@ -179,12 +191,22 @@ const headCells = [
     customFilterAndSearch: (term, rowData) => term <= rowData.idols.length,
     customSort: (a, b) => a.idols.length - b.idols.length,
   },
+];
+
+const appearanceSpecficCells = [
   {
     field: "place",
     numeric: true,
     disablePadding: false,
     title: "Place",
     customFilterAndSearch: (term, rowData) => term == rowData.place,
+  },
+  {
+    field: "season",
+    numeric: false,
+    disablePadding: true,
+    title: "Season",
+    defaultSort: "desc",
   },
   {
     field: "rank",
@@ -195,6 +217,35 @@ const headCells = [
       ((rowData.rank / 18) * 100).toFixed(1).toString() + "%",
   },
 ];
+
+const careerSpecificCells = [
+  {
+    field: "seasons",
+    numeric: true,
+    disablePadding: false,
+    title: "Times Played",
+    render: (rowData) => rowData.seasons.length,
+    customFilterAndSearch: (term, rowData) => term <= rowData.seasons.length,
+    customSort: (a, b) => a.seasons.length - b.seasons.length,
+  },
+];
+
+const insert = (arr, index, newItem) => [
+  ...arr.slice(0, index),
+  newItem,
+  ...arr.slice(index),
+];
+
+const spliceCareerHeaders = () => {
+  let result = headCells;
+  for (let val in careerSpecificCells) {
+    result = insert(result, 5, careerSpecificCells[val]);
+  }
+  return result;
+};
+
+const careerHeaders = spliceCareerHeaders();
+const appearanceHeaders = headCells.concat(appearanceSpecficCells);
 
 const theme = createMuiTheme({
   overrides: {
@@ -207,34 +258,46 @@ const theme = createMuiTheme({
 });
 
 const ContestantsTable = (props) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <MaterialTable
-        icons={tableIcons}
-        showTitle={false}
-        title=" "
-        columns={headCells}
-        data={props.appearances}
-        options={{
-          filtering: true,
-          sorting: true,
-          rowStyle: (rowData, index) => ({
-            backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
-          }),
-          pageSize: 25,
-          headerStyle: { position: "sticky", top: 0 },
-          // maxBodyHeight: "650px",
-        }}
-        detailPanel={(rowData) => {
-          return <ContestantToggle appearance={rowData} />;
-        }}
-        onRowClick={(event, rowData, togglePanel) => togglePanel()}
-      />
-    </ThemeProvider>
-  );
-};
+  const classes = useStyles();
+  const [state, setState] = useState("Individual Appearance");
+  const [data, setData] = useState({
+    headers: headCells,
+    rows: props.appearances,
+  });
 
-const Contestants = (props) => {
+  const handleChange = (event) => {
+    if (event.target.value != state) {
+      setState(event.target.value);
+    }
+  };
+
+  useEffect(() => {
+    if (state === "Individual Appearance") {
+      setData({
+        headers: appearanceHeaders,
+        rows: props.appearances,
+      });
+    } else if (state == "Career") {
+      setData({
+        headers: careerHeaders,
+        rows: props.careers,
+      });
+    }
+  }, [state]);
+
+  useEffect(() => {
+    async function getAppearances() {
+      const res = await fetch(
+        `${process.env.REACT_APP_USERS_SERVICE_URL}/appearances`
+      );
+      res
+        .json()
+        .then((res) => setData({ headers: appearanceHeaders, rows: res }))
+        .catch((err) => console.log(err));
+    }
+    getAppearances();
+  }, []);
+
   return (
     <div align="center">
       <h1 className="title is-1" style={{ fontFamily: "Survivants" }}>
@@ -242,14 +305,80 @@ const Contestants = (props) => {
       </h1>
       <hr />
       <br />
-      <ContestantsTable appearances={props.appearances}> </ContestantsTable>
+      <ThemeProvider theme={theme}>
+        <MaterialTable
+          icons={tableIcons}
+          showTitle={false}
+          title=" "
+          columns={data.headers}
+          data={data.rows}
+          options={{
+            // tableLayout: "fixed",
+            grouping: true,
+            filtering: true,
+            sorting: true,
+            doubleHorizontalScroll: true,
+            columnsButton: true,
+            pageSize: 25,
+            pageSizeOptions: [5, 10, 25, 50, 100],
+            toolbarButtonAlignment: "right",
+            thirdSortClick: false,
+            searchFieldStyle: {
+              width: "100%",
+            },
+            headerStyle: {
+              position: "sticky",
+              top: 0,
+              backgroundColor: "#01579b",
+              color: "#FFF",
+              fontFamily: "Survivants",
+            },
+            rowStyle: (rowData, index) => ({
+              backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
+              fontFamily: "Verdana",
+            }),
+          }}
+          detailPanel={(rowData) => {
+            return <ContestantToggle appearance={rowData} />;
+          }}
+          onRowClick={(event, rowData, togglePanel) => togglePanel()}
+          components={{
+            Toolbar: (props) => (
+              <div align="right">
+                <MTableToolbar {...props} />
+                <div style={{ padding: "0px 10px" }}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="age-native-simple">Type</InputLabel>
+                    <Select
+                      native
+                      value={state}
+                      onChange={handleChange}
+                      inputProps={{
+                        name: "age",
+                        id: "age-native-simple",
+                      }}
+                    >
+                      <option aria-label="None" value="" />
+                      <option value="Individual Appearance">
+                        Individual Appearance
+                      </option>
+                      <option value="Career">Career</option>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+            ),
+          }}
+        />
+      </ThemeProvider>
     </div>
   );
 };
 
 // new
-Contestants.propTypes = {
+ContestantsTable.propTypes = {
   appearances: PropTypes.array.isRequired,
+  careers: PropTypes.array.isRequired,
 };
 
-export default Contestants;
+export default ContestantsTable;

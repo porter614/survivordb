@@ -83,6 +83,21 @@ def seed_survivor():
     db.session.commit()
 
 
+@cli.command("seed_jeff")
+def seed_jeff():
+    appearance = generate_appearances()[0][1]
+    appearance.season = -1
+    contestant = Contestant(
+        name="Jeff Probst",
+        image_link="https://www.southjersey.com/articleimages/ACF75E.gif",
+        profile_image_link="https://www.southjersey.com/articleimages/ACF75E.gif",
+    )
+    db.session.add(appearance)
+    contestant.appearances.append(appearance)
+    db.session.add(contestant)
+    db.session.commit()
+
+
 # @cli.command("download_survivor")
 # def cli_download_season_data():
 #     download_season_data()

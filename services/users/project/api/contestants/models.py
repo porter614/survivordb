@@ -21,7 +21,8 @@ class Contestant(db.Model):
 
     @property
     def occupation(self):
-        return [x for x in self._occupation.split(";")]
+        tmp = [x for x in self._occupation.split(";") if x]
+        return tmp
 
     @occupation.setter
     def occupation(self, value):
