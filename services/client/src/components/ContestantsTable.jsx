@@ -72,6 +72,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const renderCellData = (rowData) => rowData.idols.length;
+
+function customRender(value, renderType, renderFunc, field, ...args) {
+  if (renderType === "row") {
+    return renderFunc(value[field], ...args);
+  }
+  if (renderType === "group") {
+    return renderFunc(value, ...args);
+  }
+}
+
 const headCells = [
   {
     field: "profile_image_link",
@@ -187,7 +198,9 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     title: "Idols Found",
-    render: (rowData) => rowData.idols.length,
+    render: (rowData, renderType) => rowData.idols.length,
+    // render: (value, renderType) =>
+    //   customRender(value, renderType, renderCellData, "idols"),
     customFilterAndSearch: (term, rowData) => term <= rowData.idols.length,
     customSort: (a, b) => a.idols.length - b.idols.length,
   },

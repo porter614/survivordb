@@ -82,6 +82,10 @@ career = contestant_namespace.model(
     },
 )
 
+player_name = contestant_namespace.model(
+    "Player", {"id": fields.String(), "name": fields.String(),},
+)
+
 
 def compile_career_stats(appearances):
     c = Counter()
@@ -160,7 +164,24 @@ class Career(Resource):
         return career, 200
 
 
+class PlayerNames(Resource):
+    # @contestant_namespace.marshal_with(player_name, as_list=True)
+    def get(self):
+        """Returns all users."""
+        # return get_all_contestants(**request.args), 200
+        return (
+            dict(
+                map(
+                    lambda contestant: (contestant.name, contestant.id),
+                    get_all_contestants(**request.args),
+                )
+            ),
+            200,
+        )
+
+
 contestant_namespace.add_resource(ContestantList, "")
 contestant_namespace.add_resource(Contestant, "/<int:contestant_id>")
 contestant_namespace.add_resource(Career, "/<int:contestant_id>/career")
 contestant_namespace.add_resource(CareerList, "/careers")
+contestant_namespace.add_resource(PlayerNames, "/names")

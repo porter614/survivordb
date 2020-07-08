@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     margin: "auto",
     maxWidth: "100%",
   },
@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
   extraStatKey: {
     display: "inline-block",
     fontWeight: "bold",
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
   extraStatValue: {
     display: "inline-block",
     padding: "10px",
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
 }));
 
@@ -69,8 +69,8 @@ const ContestantToggle = (props) => {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Box m={1}>
-          <Grid container spacing={32}>
-            <Grid container xs={3}>
+          <Grid container spacing={10}>
+            <Grid container>
               <Grid item xs={12}>
                 <Paper className={classes.paper} align="center">
                   {nth[props.appearance.place]}
@@ -78,15 +78,15 @@ const ContestantToggle = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <ButtonBase>
-                  <img
+                  {/* <img
                     className={classes.img}
                     alt="complex"
                     src={`https://survivordb.s3-us-west-2.amazonaws.com/${props.appearance.season}.jpg`}
-                  />
+                  /> */}
                 </ButtonBase>
               </Grid>
             </Grid>
-            <Grid container xs={9} direction="row">
+            <Grid container direction="row">
               <Grid item xs={12}>
                 <Typography gutterBottom variant="subtitle1" align="center">
                   Additional Metrics

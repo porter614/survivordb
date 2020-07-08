@@ -7,12 +7,10 @@ const useStyles = makeStyles((theme) => ({
   extraStatKey: {
     display: "inline-block",
     fontWeight: "bold",
-    padding: theme.spacing.unit,
   },
   extraStatValue: {
     display: "inline-block",
     padding: "10px",
-    padding: theme.spacing.unit,
   },
 }));
 
