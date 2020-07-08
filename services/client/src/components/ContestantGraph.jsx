@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ContestantGraph = (props) => {
+  const [selectedNode, setSelectedNode] = useState(null);
+
   const [graph, setGraph] = useState({
     nodes: [],
     edges: [],
@@ -20,14 +22,6 @@ const ContestantGraph = (props) => {
     },
     physics: {
       enabled: true,
-      // hierarchicalRepulsion: {
-      //   nodeDistance: 100,
-      //   damping: 0.09,
-      // },
-      // barnesHut: {
-      //   springLength: 1000,
-      // },
-      // solver: "barnesHut",
     },
     nodes: {
       shape: "dot",
@@ -37,6 +31,7 @@ const ContestantGraph = (props) => {
       },
       borderWidth: 2,
     },
+    interaction: { multiselect: true, navigationButtons: true },
     edges: {
       width: 2,
     },
@@ -46,8 +41,13 @@ const ContestantGraph = (props) => {
   };
 
   const events = {
-    select: function(event) {
+    doubleClick: function(event) {
       var { nodes, edges } = event;
+      console.log(nodes);
+      if (nodes.length === 1) {
+        var node = nodes[0];
+        window.location.href = `/contestant/${node}`;
+      }
     },
   };
 
@@ -75,10 +75,12 @@ const ContestantGraph = (props) => {
       getNetwork={(network) => {
         //  if you want access to vis.js network api you can set the state in a parent component using this property
         network.on("stabilizationIterationsDone", function() {
-          network.setOptions({ physics: false });
+          network.setOptions({
+            physics: false,
+          });
         });
       }}
-      style={{ height: "1000px", width: "100%" }}
+      style={{ height: "2000px", width: "100%" }}
     />
   );
 };

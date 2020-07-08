@@ -32,14 +32,9 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
 const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
   DetailPanel: forwardRef((props, ref) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -95,9 +90,7 @@ const headCells = [
         transition="all .2s ease"
         vertical-align="middle"
         style={{
-          zoom: "150%",
-          height: "50",
-          width: "150",
+          width: 50,
           borderColor: "#74c7e3",
           borderRadius: "50%",
         }}
@@ -318,72 +311,75 @@ const ContestantsTable = (props) => {
       </h1>
       <hr />
       <br />
-      <ThemeProvider theme={theme}>
-        <MaterialTable
-          icons={tableIcons}
-          showTitle={false}
-          title=" "
-          columns={data.headers}
-          data={data.rows}
-          options={{
-            // tableLayout: "fixed",
-            grouping: true,
-            filtering: true,
-            sorting: true,
-            doubleHorizontalScroll: true,
-            columnsButton: true,
-            pageSize: 25,
-            pageSizeOptions: [5, 10, 25, 50, 100],
-            toolbarButtonAlignment: "right",
-            thirdSortClick: false,
-            searchFieldStyle: {
-              width: "100%",
-            },
-            headerStyle: {
-              position: "sticky",
-              top: 0,
-              backgroundColor: "#01579b",
-              color: "#FFF",
-              fontFamily: "Survivants",
-            },
-            rowStyle: (rowData, index) => ({
-              backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
-              fontFamily: "Verdana",
-            }),
-          }}
-          detailPanel={(rowData) => {
-            return <ContestantToggle appearance={rowData} />;
-          }}
-          onRowClick={(event, rowData, togglePanel) => togglePanel()}
-          components={{
-            Toolbar: (props) => (
-              <div align="right">
-                <MTableToolbar {...props} />
-                <div style={{ padding: "0px 10px" }}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="age-native-simple">Type</InputLabel>
-                    <Select
-                      native
-                      value={state}
-                      onChange={handleChange}
-                      inputProps={{
-                        name: "age",
-                        id: "age-native-simple",
-                      }}
-                    >
-                      <option aria-label="None" value="" />
-                      <option value="Individual Appearance">
-                        Individual Appearance
-                      </option>
-                      <option value="Career">Career</option>
-                    </Select>
-                  </FormControl>
-                </div>
+      {/* <ThemeProvider theme={theme}> */}
+      <MaterialTable
+        style={{
+          zoom: "67%",
+        }}
+        icons={tableIcons}
+        showTitle={false}
+        title=" "
+        columns={data.headers}
+        data={data.rows}
+        options={{
+          // tableLayout: "fixed",
+          grouping: true,
+          filtering: true,
+          sorting: true,
+          doubleHorizontalScroll: true,
+          columnsButton: true,
+          pageSize: 25,
+          pageSizeOptions: [5, 10, 25, 50, 100],
+          toolbarButtonAlignment: "right",
+          thirdSortClick: false,
+          searchFieldStyle: {
+            width: "100%",
+          },
+          headerStyle: {
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#01579b",
+            color: "#FFF",
+            fontFamily: "Survivants",
+          },
+          rowStyle: (rowData, index) => ({
+            backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
+            fontFamily: "Verdana",
+          }),
+        }}
+        detailPanel={(rowData) => {
+          return <ContestantToggle appearance={rowData} />;
+        }}
+        onRowClick={(event, rowData, togglePanel) => togglePanel()}
+        components={{
+          Toolbar: (props) => (
+            <div align="right">
+              <MTableToolbar {...props} />
+              <div style={{ padding: "0px 10px" }}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-native-simple">Type</InputLabel>
+                  <Select
+                    native
+                    value={state}
+                    onChange={handleChange}
+                    inputProps={{
+                      name: "age",
+                      id: "age-native-simple",
+                    }}
+                  >
+                    <option aria-label="None" value="" />
+                    <option value="Individual Appearance">
+                      Individual Appearance
+                    </option>
+                    <option value="Career">Career</option>
+                  </Select>
+                </FormControl>
               </div>
-            ),
-          }}
-        />
-      </ThemeProvider>
+            </div>
+          ),
+        }}
+      />
+      {/* </ThemeProvider> */}
     </div>
   );
 };

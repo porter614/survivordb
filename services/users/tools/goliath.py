@@ -342,5 +342,17 @@ def get_contestant_personal_data(name):
     f.close()
 
 
+def get_contestant_personal_data_from_csv(name):
+    data_folder = (
+        config.primary["DATA_PATH"] + "personal_data/ContestantPersonalData.csv"
+    )
+    with open(data_folder, "r") as data:
+        reader = csv.DictReader(data)
+
+        for _, row in enumerate(reader):
+            if row["name"] == name:
+                return (row["birthdate"], row["occupation"].split(";"), row["hometown"])
+
+
 if __name__ == "__main__":
     fetch_season_logos()

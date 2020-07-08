@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import PropTypes from "prop-types";
-import { Paper } from "@material-ui/core";
+import { Paper, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -15,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(1),
-    margin: "auto",
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    padding: "10px",
     maxWidth: "100%",
+    margin: "20px",
   },
   image: {
     width: 256,
@@ -67,86 +69,110 @@ const ContestantToggle = (props) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Box m={1}>
-          <Grid container spacing={10}>
-            <Grid container>
-              <Grid item xs={12}>
-                <Paper className={classes.paper} align="center">
+      <Box m={1}>
+        <Grid container spacing={10}>
+          <Grid item xs={3} align="center">
+            <Grid item xs={12}>
+              <Card className={classes.paper} align="center" elevation={10}>
+                <Typography variant="h6" style={{ fontFamily: "Survivants" }}>
                   {nth[props.appearance.place]}
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <ButtonBase>
-                  {/* <img
-                    className={classes.img}
-                    alt="complex"
-                    src={`https://survivordb.s3-us-west-2.amazonaws.com/${props.appearance.season}.jpg`}
-                  /> */}
-                </ButtonBase>
-              </Grid>
+                </Typography>
+              </Card>
             </Grid>
+            <Grid item xs={12}>
+              <ButtonBase>
+                <img
+                  className={classes.img}
+                  alt="complex"
+                  src={`https://survivordb.s3-us-west-2.amazonaws.com/${props.appearance.season}.jpg`}
+                  style={{
+                    objectFit: "cover",
+                    width: "400px",
+                    height: "100%",
+                  }}
+                />
+              </ButtonBase>
+            </Grid>
+          </Grid>
+          <Grid item xs={9}>
             <Grid container direction="row">
               <Grid item xs={12}>
-                <Typography gutterBottom variant="subtitle1" align="center">
+                <Typography
+                  gutterBottom
+                  variant="h6"
+                  align="center"
+                  style={{ fontFamily: "Survivants" }}
+                >
                   Additional Metrics
                 </Typography>
               </Grid>
+              <Grid item xs={12}>
+                <br />
+              </Grid>
+              <Grid item xs={12}>
+                <br />
+              </Grid>
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Days on the Island"
                 value={props.appearance.daysPlayed}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Challenge Appearances"
                 value={props.appearance.challengeAppearances}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Immunity Challenge Appearances"
                 value={props.appearance.immunityChallengeAppearances}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Immunity Challenge Wins"
                 value={props.appearance.immunityChallengeWins}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Reward Challenge Appearances"
                 value={props.appearance.rewardChallengeAppearances}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Reward Challenge Wins"
                 value={props.appearance.rewardChallengeWins}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Individual Reward Challenge Wins"
                 value={props.appearance.individualRewardChallengeWins}
               />
               <ExtraContestantStatistic
-                size={4}
+                size={6}
                 stat="Votes Cast at Tribals with this player"
                 value={props.appearance.totalVotesCast}
               />
               <Grid item xs={12}>
-                <div align="center">
-                  <ButtonBase>
-                    <Link to={`/contestant/${props.appearance.contestant_id}`}>
-                      <Typography style={{ cursor: "pointer" }}>
-                        Player Career Profile
-                      </Typography>
-                    </Link>
-                  </ButtonBase>
-                </div>
+                <br />
+              </Grid>
+              <Grid item xs={12}>
+                <br />
+              </Grid>
+              <Grid item xs={12} align="center">
+                <ButtonBase>
+                  <Link to={`/contestant/${props.appearance.contestant_id}`}>
+                    <Typography
+                      style={{ cursor: "pointer", fontFamily: "Survivants" }}
+                    >
+                      Player Career Profile
+                    </Typography>
+                  </Link>
+                </ButtonBase>
               </Grid>
             </Grid>
           </Grid>
-        </Box>
-      </Paper>
+        </Grid>
+      </Box>
     </div>
   );
 };

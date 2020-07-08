@@ -20,6 +20,7 @@ contestant = contestant_namespace.model(
         "hometown": fields.String(readOnly=True),
         "occupation": fields.String(readOnly=True),
         "appearances": fields.List(fields.Integer(attribute="id")),
+        "seasons": fields.List(fields.Integer(attribute="id")),
         "image_link": fields.String(readOnly=True),
         "profile_image_link": fields.String(readOnly=True),
     },
@@ -50,7 +51,16 @@ career_stats = set(
 career = contestant_namespace.model(
     "Career",
     {
-        "seasons": fields.List(fields.Integer()),
+        "seasons": fields.List(
+            fields.Integer()
+            # fields.Nested(
+            #     {
+            #         fields.Integer(attribute="season.id"): fields.Integer(
+            #             attribute="season.order"
+            #         )
+            #     }
+            # )
+        ),
         "id": fields.Integer(readOnly=True),
         "contestant_id": fields.String(attribute="contestant.id"),
         "contestant": fields.String(attribute="contestant.name"),
@@ -76,7 +86,6 @@ career = contestant_namespace.model(
         "tribalCouncilAppearances": fields.Integer(),
         "juryVotesReceived": fields.Integer(),
         "daysPlayed": fields.Integer(),
-        "place": fields.Integer(),
         "rank": fields.Float(),
         "idols": fields.List(fields.Integer(attribute="id")),
     },

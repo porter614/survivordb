@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import About from "./components/About";
 import ContestantsTable from "./components/ContestantsTable";
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar";
@@ -12,6 +11,7 @@ import UserStatus from "./components/UserStatus";
 import "./App.css";
 import ContestantsProfile from "./components/ContestantProfile";
 import ContestantGraph from "./components/ContestantGraph";
+import SeasonsTable from "./components/SeasonsTable";
 
 class App extends Component {
   constructor() {
@@ -171,6 +171,8 @@ class App extends Component {
               'url("https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg")',
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
+            width: "100%",
+            height: 1000,
           }}
         >
           <div>
@@ -182,20 +184,26 @@ class App extends Component {
                     exact
                     path="/"
                     render={() => (
-                      <div>
-                        <h1 className="title is-1">Users</h1>
+                      <div align="center">
+                        <h1
+                          className="title is-1"
+                          style={{
+                            fontFamily: "Survivants",
+                            color: "#74c7e3",
+                            fontSize: "200px",
+                            borderColor: "#4A90E2",
+                            borderWidth: 1,
+                            textShadow: "#000 0px 0px 10px",
+                          }}
+                        >
+                          Survivor.DB
+                        </h1>
+                        <h2 className="title is-3">Under construction</h2>
                         <hr />
                         <br />
-                        <AddUser
-                          username={this.state.username}
-                          email={this.state.email}
-                          addUser={this.addUser}
-                          // eslint-disable-next-line react/jsx-handler-names
-                          handleChange={this.handleChange}
-                        />
-                        <br />
-                        <br />
-                        <UsersList users={this.state.users} />
+                        <p>
+                          A database for all things survivor. Spoilers ahead.
+                        </p>
                       </div>
                     )}
                   />
@@ -213,7 +221,9 @@ class App extends Component {
                     exact
                     path="/graph"
                     render={() => (
-                      <ContestantGraph appearances={this.state.appearances} />
+                      <ContestantGraph
+                        appearances={this.state.appearances.slice(0, 10)}
+                      />
                     )}
                   />
                   <Route
@@ -250,6 +260,7 @@ class App extends Component {
                     path="/contestant/:id"
                     component={ContestantsProfile}
                   />
+                  <Route path="/seasons" component={SeasonsTable} />
                 </Switch>
               </div>
             </div>

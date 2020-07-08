@@ -15,6 +15,8 @@ class Appearance(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     contestant_id = db.Column(db.Integer, db.ForeignKey("contestants.id"))
     contestant = db.relationship("Contestant")
+    season_id = db.Column(db.Integer, db.ForeignKey("seasons.id"))
+    season = db.relationship("Season")
 
     # Overall Challenge Stats
     challengeWins = db.Column(db.Float, nullable=False)

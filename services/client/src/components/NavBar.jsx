@@ -18,46 +18,20 @@ const NavBar = (props) => {
         <Link to="/players" className="navbar-item" data-testid="nav-about">
           Players
         </Link>
-        <Link to="/profile" className="navbar-item" data-testid="nav-about">
-          Player Profile
+        <Link
+          to="/contestant/1?against=2"
+          className="navbar-item"
+          data-testid="nav-about"
+        >
+          Versus
         </Link>
         <Link to="/graph" className="navbar-item" data-testid="nav-about">
           Graph
         </Link>
       </div>
-      <div className="navbar-end">
-        <Link to="/register" className="navbar-item" data-testid="nav-register">
-          Register
-        </Link>
-        <Link to="/login" className="navbar-item" data-testid="nav-login">
-          Log In
-        </Link>
-      </div>
     </div>
   );
-  if (props.isAuthenticated()) {
-    menu = (
-      <div className="navbar-menu">
-        <div className="navbar-start">
-          <Link to="/players" className="navbar-item" data-testid="nav-about">
-            Players
-          </Link>
-          <Link to="/status" className="navbar-item" data-testid="nav-status">
-            User Status
-          </Link>
-        </div>
-        <div className="navbar-end">
-          <span
-            onClick={props.logoutUser}
-            className="navbar-item link"
-            data-testid="nav-logout"
-          >
-            Log Out
-          </span>
-        </div>
-      </div>
-    );
-  }
+
   return (
     <nav
       className="navbar is-dark"

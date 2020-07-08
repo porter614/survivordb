@@ -110,7 +110,7 @@ class Graph(Resource):
                 "brokenImage": "https://survivordb.s3-us-west-2.amazonaws.com/"
                 + str(appearance.season)
                 + ".jpg",
-                "value": 15,
+                "value": 15 * len(appearance.contestant.appearances),
             }
             if appearance.contestant.name == "Jeff Probst":
                 nodes[appearance.contestant_id]["value"] = 1000

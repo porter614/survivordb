@@ -10,6 +10,7 @@ from project.api.users.models import User
 from project.api.contestants.models import Contestant
 from project.api.appearances.models import Appearance
 from project.api.idols.models import Idol
+from project.api.seasons.models import Season
 from tools.goliath import (
     generate_appearances,
     fetch_contestant_photos_wikia,
@@ -18,9 +19,12 @@ from tools.goliath import (
     upload_season_logos_s3,
     generate_profile_image_link,
     get_contestant_personal_data,
+    get_contestant_personal_data_from_csv,
     generate_idols,
 )
 from tools.goliath import download_season_data
+from collections import defaultdict
+
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
@@ -48,13 +52,14 @@ def seed_db():
 def seed_survivor():
     appearances = generate_appearances()
     idols = generate_idols()
+    seasons = defaultdict(list)
 
     for contestant_name, appearance in appearances:
         print(contestant_name)
 
         contestant = Contestant.query.filter_by(name=contestant_name).first()
         if not contestant:
-            personal_data = get_contestant_personal_data(contestant_name)
+            personal_data = get_contestant_personal_data_from_csv(contestant_name)
 
             contestant = Contestant(
                 name=contestant_name,
@@ -77,8 +82,17 @@ def seed_survivor():
                 appearance.idols.append(idol)
                 db.session.add(idol)
 
+        if not seasons[appearance.season]:
+            seasons[appearance.season] = Season(order=appearance.season)
+
+        seasons[appearance.season].contestants.append(contestant)
+        seasons[appearance.season].appearances.append(appearance)
+
         contestant.appearances.append(appearance)
         db.session.add(appearance)
+
+    for season in seasons.values():
+        db.session.add(season)
 
     db.session.commit()
 

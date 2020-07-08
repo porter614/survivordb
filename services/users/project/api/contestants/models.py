@@ -18,6 +18,7 @@ class Contestant(db.Model):
     birthdate = db.Column(db.DateTime, default=func.now(), nullable=False)
     _occupation = db.Column(db.String(256), default="", nullable=False)
     hometown = db.Column(db.String(256), default="unknown", nullable=False)
+    season_id = db.Column(db.Integer, db.ForeignKey("seasons.id"))
 
     @property
     def occupation(self):
@@ -37,3 +38,8 @@ class Contestant(db.Model):
     # TODO add more
     appearances = db.relationship("Appearance")
 
+    seasons = db.relationship(
+        "Season",
+        secondary="link",
+        # backref="contestants",  # back_populates="contestants"
+    )
