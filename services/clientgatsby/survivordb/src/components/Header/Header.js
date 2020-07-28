@@ -7,7 +7,7 @@ import { ScreenWidthContext, FontLoadedContext } from "../../layouts"
 import config from "../../../content/meta/config"
 import Menu from "../Menu"
 
-import avatar from "../../images/jpg/avatar.jpg"
+import avatar from "../../images/jpg/twitter.jpg"
 import "./style.css"
 
 class Header extends React.Component {
@@ -67,11 +67,12 @@ class Header extends React.Component {
             )}
           </FontLoadedContext.Consumer>
         </header>
-        <VisibilitySensor onChange={this.visibilitySensorChange}>
+        <VisibilitySensor
+          partialVisibility="true"
+          onChange={this.visibilitySensorChange}
+        >
           <div className="sensor" />
         </VisibilitySensor>
-
-        {/* --- STYLES --- */}
       </React.Fragment>
     )
   }

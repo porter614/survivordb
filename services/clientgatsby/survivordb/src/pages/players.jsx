@@ -48,7 +48,7 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 }
 
 function calculateAge(birthday) {
@@ -61,11 +61,11 @@ function calculateAge(birthday) {
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
-    width: 325,
+    width: 325
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+    marginTop: theme.spacing(2)
+  }
 }))
 
 const headCells = [
@@ -82,11 +82,11 @@ const headCells = [
         style={{
           width: 50,
           borderColor: "#74c7e3",
-          borderRadius: "50%",
+          borderRadius: "50%"
         }}
       />
     ),
-    grouping: false,
+    grouping: false
   },
   {
     field: "contestant",
@@ -94,14 +94,14 @@ const headCells = [
     disablePadding: true,
     title: "Name",
     customFilterAndSearch: (term, rowData) =>
-      rowData.contestant.toLowerCase().includes(term.toLowerCase()),
+      rowData.contestant.toLowerCase().includes(term.toLowerCase())
   },
   {
     field: "birthdate",
     numeric: true,
     disablePadding: false,
     title: "Age",
-    render: rowData => calculateAge(rowData.birthdate),
+    render: rowData => calculateAge(rowData.birthdate)
   },
   {
     field: "hometown",
@@ -109,7 +109,7 @@ const headCells = [
     disablePadding: false,
     title: "Hometown",
     customFilterAndSearch: (term, rowData) =>
-      rowData.hometown.toLowerCase().includes(term.toLowerCase()),
+      rowData.hometown.toLowerCase().includes(term.toLowerCase())
   },
   {
     field: "occupation",
@@ -118,16 +118,19 @@ const headCells = [
     title: "Occupation",
     render: rowData => rowData.occupations.join(),
     customFilterAndSearch: (term, rowData) =>
-      rowData.occupations.join().toLowerCase().includes(term.toLowerCase()),
+      rowData.occupations
+        .join()
+        .toLowerCase()
+        .includes(term.toLowerCase()),
     customSort: (a, b) => a.occupations.length - b.occupations.length,
-    group: false,
+    group: false
   },
   {
     field: "challengeWins",
     numeric: true,
     disablePadding: false,
     title: "Challenge Wins",
-    customFilterAndSearch: (term, rowData) => term <= rowData.challengeWins,
+    customFilterAndSearch: (term, rowData) => term <= rowData.challengeWins
   },
   {
     field: "individualImmunityChallengeWins",
@@ -135,43 +138,43 @@ const headCells = [
     disablePadding: false,
     title: "Individual Immunity Challenge Wins",
     customFilterAndSearch: (term, rowData) =>
-      term <= rowData.individualImmunityChallengeWins,
+      term <= rowData.individualImmunityChallengeWins
   },
   {
     field: "sitOuts",
     numeric: true,
     disablePadding: false,
-    title: "Challenge Sit Outs",
+    title: "Challenge Sit Outs"
   },
   {
     field: "tribalCouncilAppearances",
     numeric: true,
     disablePadding: false,
-    title: "Tribal Council Appearances",
+    title: "Tribal Council Appearances"
   },
   {
     field: "votesForBootee",
     numeric: true,
     disablePadding: false,
-    title: "Votes for Bootee",
+    title: "Votes for Bootee"
   },
   {
     field: "wrongSideOfTheVote",
     numeric: true,
     disablePadding: false,
-    title: "Wrong Side of the Vote",
+    title: "Wrong Side of the Vote"
   },
   {
     field: "votesAgainst",
     numeric: true,
     disablePadding: false,
-    title: "Votes against Player",
+    title: "Votes against Player"
   },
   {
     field: "juryVotesReceived",
     numeric: true,
     disablePadding: false,
-    title: "Jury Votes Received",
+    title: "Jury Votes Received"
   },
   {
     field: "idols",
@@ -180,8 +183,8 @@ const headCells = [
     title: "Idols Found",
     render: (rowData, renderType) => rowData.idols.length,
     customFilterAndSearch: (term, rowData) => term <= rowData.idols.length,
-    customSort: (a, b) => a.idols.length - b.idols.length,
-  },
+    customSort: (a, b) => a.idols.length - b.idols.length
+  }
 ]
 
 const appearanceSpecficCells = [
@@ -190,22 +193,22 @@ const appearanceSpecficCells = [
     numeric: true,
     disablePadding: false,
     title: "Place",
-    customFilterAndSearch: (term, rowData) => term == rowData.place,
+    customFilterAndSearch: (term, rowData) => term == rowData.place
   },
   {
     field: "season",
     numeric: false,
     disablePadding: true,
     title: "Season",
-    defaultSort: "desc",
+    defaultSort: "desc"
   },
   {
     field: "rank",
     numeric: true,
     disablePadding: false,
     title: "'Perfect' Game Percentage",
-    render: rowData => ((rowData.rank / 18) * 100).toFixed(1).toString() + "%",
-  },
+    render: rowData => ((rowData.rank / 18) * 100).toFixed(1).toString() + "%"
+  }
 ]
 
 const careerSpecificCells = [
@@ -216,14 +219,14 @@ const careerSpecificCells = [
     title: "Times Played",
     render: rowData => rowData.seasons.length,
     customFilterAndSearch: (term, rowData) => term <= rowData.seasons.length,
-    customSort: (a, b) => a.seasons.length - b.seasons.length,
-  },
+    customSort: (a, b) => a.seasons.length - b.seasons.length
+  }
 ]
 
 const insert = (arr, index, newItem) => [
   ...arr.slice(0, index),
   newItem,
-  ...arr.slice(index),
+  ...arr.slice(index)
 ]
 
 const spliceCareerHeaders = () => {
@@ -241,10 +244,10 @@ const theme = createMuiTheme({
   overrides: {
     MuiTableRow: {
       "&:hover": {
-        backgroundColor: "#dedede",
-      },
-    },
-  },
+        backgroundColor: "#dedede"
+      }
+    }
+  }
 })
 
 const ContestantsTable = props => {
@@ -252,7 +255,7 @@ const ContestantsTable = props => {
   const [state, setState] = useState("Individual Appearance")
   const [data, setData] = useState({
     headers: headCells,
-    rows: [],
+    rows: []
   })
 
   const handleChange = event => {
@@ -276,7 +279,7 @@ const ContestantsTable = props => {
       .then(res => {
         setData({
           headers: headers,
-          rows: res.data,
+          rows: res.data
         })
       })
       .catch(err => {
@@ -293,7 +296,7 @@ const ContestantsTable = props => {
           style={{
             fontFamily: "Survivants",
             color: "#74c7e3",
-            textShadow: "#000 0px 0px 10px",
+            textShadow: "#000 0px 0px 10px"
           }}
         >
           Survivor Players
@@ -303,7 +306,7 @@ const ContestantsTable = props => {
         {/* <ThemeProvider theme={theme}> */}
         <MaterialTable
           style={{
-            zoom: "67%",
+            zoom: "67%"
           }}
           icons={tableIcons}
           showTitle={false}
@@ -322,7 +325,7 @@ const ContestantsTable = props => {
             toolbarButtonAlignment: "right",
             thirdSortClick: false,
             searchFieldStyle: {
-              width: "100%",
+              width: "100%"
             },
             headerStyle: {
               position: "sticky",
@@ -330,11 +333,12 @@ const ContestantsTable = props => {
               backgroundColor: "#01579b",
               color: "#FFF",
               fontFamily: "Survivants",
+              zIndex: 1
             },
             rowStyle: (rowData, index) => ({
               backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
-              fontFamily: "Verdana",
-            }),
+              fontFamily: "Verdana"
+            })
           }}
           detailPanel={rowData => {
             return <ContestantToggle appearance={rowData} />
@@ -353,7 +357,7 @@ const ContestantsTable = props => {
                       onChange={handleChange}
                       inputProps={{
                         name: "age",
-                        id: "age-native-simple",
+                        id: "age-native-simple"
                       }}
                     >
                       <option aria-label="None" value="" />
@@ -365,7 +369,7 @@ const ContestantsTable = props => {
                   </FormControl>
                 </div>
               </div>
-            ),
+            )
           }}
         />
         {/* </ThemeProvider> */}

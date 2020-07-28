@@ -136,10 +136,11 @@
 @from-width desktop {
   .item {
     :global(a) {
-      color: #709425;
+      color: #ffffff;
       padding: 5px;
       transition: all 0.5s;
       border-radius: 5px;
+      font-family: "Survivants";
     }
 
     :global(.homepage):not(.fixed) & :global(a) {
@@ -147,7 +148,7 @@
     }
 
     :global(a:hover) {
-      color: #709425;
+      color: #ffffff;
       background: color(white alpha(-60%));
     }
 
@@ -156,7 +157,7 @@
     }
 
     &:hover :global(svg) {
-      fill: #709425;
+      fill: #ffffff;
       opacity: 1;
 
       :global(.hero) & :global(svg) {

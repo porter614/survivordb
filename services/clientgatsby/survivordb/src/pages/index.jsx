@@ -1,16 +1,9 @@
 import React from "react"
-import { Link } from "gatsby"
-
-// import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
-
 import "./mystyles.scss"
 
 import PropTypes from "prop-types"
 import { graphql } from "gatsby"
 import { ThemeContext, Layout } from "../layouts"
-// import Blog from "../components/Blog"
 import Hero from "../components/Hero"
 import Seo from "../components/SEO"
 
@@ -45,7 +38,7 @@ class IndexPage extends React.Component {
       tablet,
       mobile
     }
-
+    console.log(`url("${backgrounds.desktop}")`)
     return (
       <React.Fragment>
         <ThemeContext.Consumer>
@@ -54,6 +47,9 @@ class IndexPage extends React.Component {
               scrollToContent={this.scrollToContent}
               backgrounds={backgrounds}
               theme={theme}
+              style={{
+                backgroundImage: `url(${backgrounds.desktop})`
+              }}
             />
           )}
         </ThemeContext.Consumer>

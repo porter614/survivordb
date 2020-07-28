@@ -8,12 +8,12 @@ module.exports = {
   siteLanguage: "en",
 
   /* author */
-  authorName: "greg lobinski",
-  authorTwitterAccount: "greglobinski",
+  authorName: "Victor Porter",
+  authorTwitterAccount: "porter614",
 
   /* info */
-  headerTitle: "greg lobinski",
-  headerSubTitle: "presents another one GatsbyJS starter",
+  headerTitle: "Victor Porter",
+  headerSubTitle: "created by fans for fans",
 
   /* manifest.json */
   manifestName: "HeroBlog - a GatsbyJS starter",
