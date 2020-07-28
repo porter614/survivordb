@@ -14,7 +14,8 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users_dev
-      - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_dev
+      - SQLALCHEMY_RECORD_QUERIES=true
     depends_on:
       - users-db
 
@@ -43,3 +44,24 @@ services:
     depends_on:
       - users
     stdin_open: true
+# services:
+#   users:
+#     build:
+#       context: .
+#       dockerfile: ./services/users/Dockerfile.deploy
+#     entrypoint: ["/usr/src/app/entrypoint.sh"]
+#     volumes:
+#       - "./services/users:/usr/src/app"
+#       - ./services/client:/usr/src/app/client
+#       - /usr/src/app/node_modules
+#     ports:
+#       - 5001:5000
+#       - 3007:3000
+#     environment:
+#       - FLASK_ENV=development
+#       - APP_SETTINGS=project.config.DevelopmentConfig
+#       - DATABASE_URL=postgresql://postgres:survivordb@database-1.cfeinen7jigb.us-west-2.rds.amazonaws.com:5432
+#       - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
+#       - NODE_ENV=development
+#       - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+#     stdin_open: true

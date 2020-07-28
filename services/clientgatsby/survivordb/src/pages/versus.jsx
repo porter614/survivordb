@@ -1,19 +1,20 @@
-import React, { Component, useState, useEffect } from "react";
-import axios from "axios";
-import Grid from "@material-ui/core/Grid";
-import { Paper, Button, Card } from "@material-ui/core";
-import ButtonBase from "@material-ui/core/ButtonBase";
-import Typography from "@material-ui/core/Typography";
-import Image from "react-bootstrap/Image";
-import ExtraContestantStatistic from "./ContestantKeyValue";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import InputLabel from "@material-ui/core/InputLabel";
-import NativeSelect from "@material-ui/core/NativeSelect";
-import { blue } from "@material-ui/core/colors";
-import * as QueryString from "query-string";
+import React, { Component, useState, useEffect } from "react"
+import axios from "axios"
+import Grid from "@material-ui/core/Grid"
+import { Paper, Card } from "@material-ui/core"
+import Typography from "@material-ui/core/Typography"
+import ExtraContestantStatistic from "../components/ContestantKeyValue"
+import FormControl from "@material-ui/core/FormControl"
+import FormHelperText from "@material-ui/core/FormHelperText"
+import InputLabel from "@material-ui/core/InputLabel"
+import NativeSelect from "@material-ui/core/NativeSelect"
+import * as QueryString from "query-string"
 
-const styles = (theme) => ({
+import "./mystyles.scss"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
+
+const styles = theme => ({
   root: {
     flexGrow: 1,
     display: "inline-block",
@@ -45,32 +46,32 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
-});
+})
 
 function calculateAge(birthday) {
   // birthday is a date
-  var ageDifMs = Date.now() - Date.parse(birthday);
-  var ageDate = new Date(ageDifMs); // miliseconds from epoch
-  return Math.abs(ageDate.getUTCFullYear() - 1970);
+  var ageDifMs = Date.now() - Date.parse(birthday)
+  var ageDate = new Date(ageDifMs) // miliseconds from epoch
+  return Math.abs(ageDate.getUTCFullYear() - 1970)
 }
 
 const nonCompareCells = [
   {
     field: "birthdate",
     title: "Age",
-    render: (val) => calculateAge(val),
+    render: val => calculateAge(val),
   },
   {
     field: "hometown",
     title: "Hometown",
-    render: (val) => val,
+    render: val => val,
   },
   {
     field: "occupations",
     title: "Occupation",
-    render: (val) => val,
+    render: val => val,
   },
-];
+]
 
 const headCells = [
   {
@@ -107,12 +108,12 @@ const headCells = [
   },
   { field: "idols", title: "Idols Found" },
   // { field: "place", title: "Place" },
-];
+]
 
-const PlayerCard = (props) => {
-  const [seasonPicker, setSeasonPicker] = useState(0);
+const PlayerCard = props => {
+  const [seasonPicker, setSeasonPicker] = useState(0)
 
-  useEffect(() => {}, [seasonPicker]);
+  useEffect(() => {}, [seasonPicker])
 
   return (
     <Grid item xs={4} justify="center">
@@ -195,7 +196,7 @@ const PlayerCard = (props) => {
               </Grid>
               <Grid item xs={10}>
                 <div align="center">
-                  {nonCompareCells.map((statistic) => (
+                  {nonCompareCells.map(statistic => (
                     // eslint-disable-next-line react/jsx-key
                     <Card className={styles.paper} style={{ margin: "20px" }}>
                       <ExtraContestantStatistic
@@ -209,7 +210,7 @@ const PlayerCard = (props) => {
                   ))}
                 </div>
                 <div align="center">
-                  {headCells.map((statistic) => (
+                  {headCells.map(statistic => (
                     // eslint-disable-next-line react/jsx-key
                     <Card
                       className={styles.paper}
@@ -245,12 +246,12 @@ const PlayerCard = (props) => {
         </Paper>
       )}
     </Grid>
-  );
-};
+  )
+}
 
-class ContestantsProfile extends Component {
+class Versus extends Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       contestant: null,
@@ -258,84 +259,84 @@ class ContestantsProfile extends Component {
       picker: "Tyson Apostol",
       againstPicker: "Tyson Apostol",
       playerNames: {},
-    };
+    }
 
-    this.handleChangeContestant = this.handleChangeContestant.bind(this);
-    this.handleChangeAgainst = this.handleChangeAgainst.bind(this);
+    this.handleChangeContestant = this.handleChangeContestant.bind(this)
+    this.handleChangeAgainst = this.handleChangeAgainst.bind(this)
     this.handleChangeContestantSeason = this.handleChangeContestantSeason.bind(
       this
-    );
-    this.handleChangeAgainstSeason = this.handleChangeAgainstSeason.bind(this);
+    )
+    this.handleChangeAgainstSeason = this.handleChangeAgainstSeason.bind(this)
+    this.getCareer = this.getCareer.bind(this)
   }
 
   getCareer(who, id) {
     axios
-      .get(
-        `${process.env.REACT_APP_USERS_SERVICE_URL}/contestants/${id}/career`
-      )
-      .then((res) => {
+      .get(`${process.env.GATSBY_USERS_SERVICE_URL}/contestants/${id}/career`)
+      .then(res => {
+        console.log(res)
         //TODO hack fix this later
-        res.data.idols = res.data.idols.length;
+        res.data.idols = 1
 
-        this.setState((s) => ({
+        this.setState(s => ({
           ...s,
           [who]: {
             career: res.data,
             appearance: res.data,
           },
-        }));
-        console.log(this.state);
+        }))
+        console.log(this.state)
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   getAppearance(who, id, season) {
     axios
       .get(
-        `${process.env.REACT_APP_USERS_SERVICE_URL}/appearances?contestant_id=${id}&season=${season}`
+        `${process.env.GATSBY_USERS_SERVICE_URL}/appearances?contestant_id=${id}&season=${season}`
       )
-      .then((res) => {
+      .then(res => {
         //TODO hack fix this later
-        res.data[0].idols = res.data[0].idols.length;
-        console.log(res.data[0]);
-        this.setState((s) => ({
+        res.data[0].idols = res.data[0].idols.length
+        console.log(res.data[0])
+        this.setState(s => ({
           ...s,
           [who]: { ...s[who], appearance: res.data[0] },
-        }));
-        console.log(this.state);
+        }))
+        console.log(this.state)
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   getPlayerNames() {
     axios
-      .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/contestants/names`)
-      .then((res) => {
-        this.setState((s) => ({ ...s, playerNames: res.data }));
+      .get(`${process.env.GATSBY_USERS_SERVICE_URL}/contestants/names`)
+      .then(res => {
+        this.setState(s => ({ ...s, playerNames: res.data }))
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   handleChangeContestant(event) {
     this.setState({
       ...this.state,
       picker: event.target.value,
-    });
-    this.getCareer("contestant", event.target.value);
+    })
+    this.getCareer("contestant", event.target.value)
   }
 
   handleChangeAgainst(event) {
     this.setState({
       ...this.state,
       againstPicker: event.target.value,
-    });
-    this.getCareer("against", event.target.value);
+    })
+    this.getCareer("against", event.target.value)
   }
 
   handleChangeSeason(who, event) {
@@ -344,72 +345,82 @@ class ContestantsProfile extends Component {
         who,
         this.state.contestant.career.contestant_id,
         event.target.value
-      );
+      )
     } else {
-      this.getCareer(
-        who,
-        this.state[who].career.contestant_id,
-        event.target.value
-      );
+      this.getCareer(who, this.state[who].career.contestant_id)
     }
   }
 
   handleChangeAgainstSeason(event) {
-    this.handleChangeSeason("against", event);
+    this.handleChangeSeason("against", event)
   }
 
   handleChangeContestantSeason(event) {
-    this.handleChangeSeason("contestant", event);
+    this.handleChangeSeason("contestant", event)
   }
 
   componentDidMount() {
-    this.getCareer("contestant", this.props.match.params.id);
-    const params = QueryString.parse(this.props.location.search);
-    if (params.against) {
-      this.getCareer("against", params.against);
+    this.getPlayerNames()
+    console.log("hello world")
+    const params = QueryString.parse(this.props.location.search)
+    let p1id
+    if (params.id === undefined) {
+      p1id = Math.floor(Math.random() * Math.floor(597))
+    } else {
+      p1id = params.id
     }
-    this.getPlayerNames();
+    let p2id = Math.floor(Math.random() * Math.floor(597))
+    this.getCareer("contestant", p1id)
+    this.getCareer("against", p2id)
+    this.setState({
+      ...this.state,
+      picker: p1id,
+      againstPicker: p2id,
+    })
   }
 
   render() {
     return (
-      <div className={styles.root} align="center">
-        <h1
-          className="title is-1"
-          style={{
-            fontFamily: "Survivants",
-            color: "#74c7e3",
-            textShadow: "#000 0px 0px 10px",
-          }}
-        >
-          Contestant Matchup
-        </h1>
-        <hr />
-        <br />
-        <Grid container>
-          <Grid item xs={1} />
-          <PlayerCard
-            playerNames={this.state.playerNames}
-            contestant={this.state.contestant}
-            against={this.state.against}
-            onHandleChange={this.handleChangeContestant}
-            onHandleSeasonChange={this.handleChangeContestantSeason}
-            picker={this.state.picker}
-          />
-          <Grid item xs={2} />
-          <PlayerCard
-            playerNames={this.state.playerNames}
-            contestant={this.state.against}
-            against={this.state.contestant}
-            onHandleChange={this.handleChangeAgainst}
-            onHandleSeasonChange={this.handleChangeAgainstSeason}
-            picker={this.state.againstPicker}
-          />
-          <Grid item xs={1} />
-        </Grid>
-      </div>
-    );
+      <Layout>
+        <SEO title="Versus" />
+        <div className={styles.root} align="center">
+          <h1
+            className="title is-1"
+            style={{
+              fontFamily: "Survivants",
+              color: "#74c7e3",
+              textShadow: "#000 0px 0px 10px",
+            }}
+          >
+            Contestant Matchup
+          </h1>
+          <hr />
+          <br />
+          <Grid container>
+            <Grid item xs={1} />
+            <PlayerCard
+              playerNames={this.state.playerNames}
+              contestant={this.state.contestant}
+              against={this.state.against}
+              onHandleChange={this.handleChangeContestant}
+              onHandleSeasonChange={this.handleChangeContestantSeason}
+              picker={this.state.picker}
+            />
+            <Grid item xs={2} />
+            <PlayerCard
+              playerNames={this.state.playerNames}
+              contestant={this.state.against}
+              against={this.state.contestant}
+              onHandleChange={this.handleChangeAgainst}
+              onHandleSeasonChange={this.handleChangeAgainstSeason}
+              picker={this.state.againstPicker}
+            />
+            <Grid item xs={1} />
+          </Grid>
+        </div>
+      </Layout>
+    )
   }
 }
 
-export default ContestantsProfile;
+export default Versus

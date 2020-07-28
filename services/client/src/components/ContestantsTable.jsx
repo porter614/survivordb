@@ -306,7 +306,14 @@ const ContestantsTable = (props) => {
 
   return (
     <div align="center">
-      <h1 className="title is-1" style={{ fontFamily: "Survivants" }}>
+      <h1
+        className="title is-1"
+        style={{
+          fontFamily: "Survivants",
+          color: "#74c7e3",
+          textShadow: "#000 0px 0px 10px",
+        }}
+      >
         Survivor Players
       </h1>
       <hr />

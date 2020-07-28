@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+// If need, change your variables before importing Bulma
+$title-color: #ff0000;
+
+@import "~bulma/bulma.sass";
+
+@font-face {
+  font-family: "Survivants";
+  src: local("Survivants"), url(../fonts/survivant.ttf) format("truetype");
+}
+
+.link:hover {
+  cursor: pointer;
+  background-color: #292929;
+  color: #f5f5f5;
+}

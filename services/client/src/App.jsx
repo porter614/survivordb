@@ -55,6 +55,7 @@ class App extends Component {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/appearances`)
       .then((res) => {
+        console.log(process.env.REACT_APP_USERS_SERVICE_URL);
         this.setState((s) => ({ ...this.state, appearances: res.data }));
       })
       .catch((err) => {
@@ -159,111 +160,106 @@ class App extends Component {
   render() {
     return (
       <div>
+        <img
+          src="https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg"
+          alt="bg"
+          style={{
+            // backgroundImage:
+            //   'url("https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg")',
+            height: "auto",
+            width: "100%",
+            position: "fixed",
+            zIndex: -1,
+          }}
+        />
         <NavBar
           title={this.state.title}
           logoutUser={this.logoutUser}
           isAuthenticated={this.isAuthenticated} // new
         />
-        <section
-          className="section"
-          style={{
-            backgroundImage:
-              'url("https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg")',
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            width: "100%",
-            height: 1000,
-          }}
-        >
+        <section className="section">
           <div>
-            <div>
-              <div>
-                <br />
-                <Switch>
-                  <Route
-                    exact
-                    path="/"
-                    render={() => (
-                      <div align="center">
-                        <h1
-                          className="title is-1"
-                          style={{
-                            fontFamily: "Survivants",
-                            color: "#74c7e3",
-                            fontSize: "200px",
-                            borderColor: "#4A90E2",
-                            borderWidth: 1,
-                            textShadow: "#000 0px 0px 10px",
-                          }}
-                        >
-                          Survivor.DB
-                        </h1>
-                        <h2 className="title is-3">Under construction</h2>
-                        <hr />
-                        <br />
-                        <p>
-                          A database for all things survivor. Spoilers ahead.
-                        </p>
-                      </div>
-                    )}
+            <br />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  <div align="center">
+                    <h1
+                      className="title is-1"
+                      style={{
+                        fontFamily: "Survivants",
+                        color: "#74c7e3",
+                        fontSize: "200px",
+                        textShadow: "#000 0px 0px 10px",
+                      }}
+                    >
+                      Survivor.DB
+                    </h1>
+                    <h2 className="title is-3" style={{ color: "white" }}>
+                      Under construction
+                    </h2>
+                    <hr />
+                    <br />
+                    <p style={{ color: "white" }}>
+                      A database for all things survivor. Spoilers ahead.
+                    </p>
+                  </div>
+                )}
+              />
+              <Route
+                exact
+                path="/players"
+                render={() => (
+                  <ContestantsTable
+                    appearances={this.state.appearances}
+                    careers={this.state.careers}
                   />
-                  <Route
-                    exact
-                    path="/players"
-                    render={() => (
-                      <ContestantsTable
-                        appearances={this.state.appearances}
-                        careers={this.state.careers}
-                      />
-                    )}
+                )}
+              />
+              <Route
+                exact
+                path="/graph"
+                render={() => (
+                  <ContestantGraph
+                    appearances={this.state.appearances.slice(0, 10)}
                   />
-                  <Route
-                    exact
-                    path="/graph"
-                    render={() => (
-                      <ContestantGraph
-                        appearances={this.state.appearances.slice(0, 10)}
-                      />
-                    )}
+                )}
+              />
+              <Route
+                exact
+                path="/register"
+                render={() => (
+                  <RegisterForm
+                    handleRegisterFormSubmit={this.handleRegisterFormSubmit}
+                    isAuthenticated={this.isAuthenticated}
                   />
-                  <Route
-                    exact
-                    path="/register"
-                    render={() => (
-                      <RegisterForm
-                        handleRegisterFormSubmit={this.handleRegisterFormSubmit}
-                        isAuthenticated={this.isAuthenticated}
-                      />
-                    )}
+                )}
+              />
+              <Route
+                exact
+                path="/login"
+                render={() => (
+                  <LoginForm
+                    handleLoginFormSubmit={this.handleLoginFormSubmit}
+                    isAuthenticated={this.isAuthenticated}
                   />
-                  <Route
-                    exact
-                    path="/login"
-                    render={() => (
-                      <LoginForm
-                        handleLoginFormSubmit={this.handleLoginFormSubmit}
-                        isAuthenticated={this.isAuthenticated}
-                      />
-                    )}
+                )}
+              />
+              <Route
+                exact
+                path="/status"
+                render={() => (
+                  <UserStatus
+                    accessToken={this.state.accessToken}
+                    isAuthenticated={this.isAuthenticated}
                   />
-                  <Route
-                    exact
-                    path="/status"
-                    render={() => (
-                      <UserStatus
-                        accessToken={this.state.accessToken}
-                        isAuthenticated={this.isAuthenticated}
-                      />
-                    )}
-                  />
-                  <Route
-                    path="/contestant/:id"
-                    component={ContestantsProfile}
-                  />
-                  <Route path="/seasons" component={SeasonsTable} />
-                </Switch>
-              </div>
-            </div>
+                )}
+              />
+              <Route path="/contestant/:id" component={ContestantsProfile} />
+              <Route path="/seasons" component={SeasonsTable} />
+            </Switch>
           </div>
         </section>
       </div>

@@ -1,0 +1,14 @@
+services/users/venv
+.dockerignore
+Dockerfile.deploy
+services/users/htmlcov
+services/users/.coverage
+services/users/data/
+
+services/client/node_modules
+services/client/coverage
+services/client/build
+services/client/.dockerignore
+services/client/Dockerfile
+services/client/Dockerfile.prod
+services/client/.env

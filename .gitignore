@@ -5,3 +5,5 @@ htmlcov
 **/.DS_Store
 venv
 **/data
+services/client/public
+services/client/.cache

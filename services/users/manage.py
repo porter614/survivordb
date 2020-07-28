@@ -1,6 +1,3 @@
-# manage.py
-
-
 import sys
 
 from flask.cli import FlaskGroup
@@ -21,6 +18,7 @@ from tools.goliath import (
     get_contestant_personal_data,
     get_contestant_personal_data_from_csv,
     generate_idols,
+    eval_race_gender,
 )
 from tools.goliath import download_season_data
 from collections import defaultdict
@@ -122,9 +120,9 @@ def fetch_photos():
     appearances = generate_appearances()
 
 
-# @cli.command("fetch_logos")
-# def fetch_logos():
-#     upload_season_logos_s3()
+@cli.command("eval_race_gender")
+def get_contestants():
+    eval_race_gender()
 
 
 if __name__ == "__main__":

@@ -342,6 +342,56 @@ def get_contestant_personal_data(name):
     f.close()
 
 
+def eval_race_gender():
+    all_contestants = Contestant.query.filter_by().all()
+    data_folder = (
+        config.primary["DATA_PATH"] + "personal_data/ContestantPersonalData.csv"
+    )
+    with open(data_folder, "r") as data, open(
+        config.primary["DATA_PATH"] + "personal_data/ContestantPersonalData2.csv", "w"
+    ) as dataw:
+        reader = csv.DictReader(data)
+        fieldnames = reader.fieldnames + ["gender", "race"]
+        writer = csv.DictWriter(dataw, fieldnames)
+        for _, row in enumerate(reader):
+            for contestant in all_contestants:
+                if row["name"] == contestant.name:
+                    gender, race = fetch_race_gender(contestant.image_link)
+                    row["gender"] = gender
+                    row["race"] = race
+                    writer.writerow(row)
+
+
+def fetch_race_gender(photo_uri):
+    print(photo_uri)
+    try:
+        resp = requests.post(
+            "http://betafaceapi.com/api/v2/media",
+            headers={"Content-Type": "application/json"},
+            json={
+                "api_key": "d45fd466-51e2-4701-8da8-04351c872236",
+                "file_uri": photo_uri,
+                "detection_flags": "basicpoints,propoints,classifiers,content",
+                "recognize_targets": ["all@mynamespace"],
+                "original_filename": "test.jpg",
+            },
+        )
+        gender, race = "unknown", "unknown"
+        response_json = resp.json()
+        tags = response_json["media"]["faces"][0]["tags"]
+
+        for tag in tags:
+            if tag["name"] == "gender":
+                gender = tag["value"]
+            if tag["name"] == "race":
+                race = tag["value"]
+
+    except:
+        pass
+
+    return gender, race
+
+
 def get_contestant_personal_data_from_csv(name):
     data_folder = (
         config.primary["DATA_PATH"] + "personal_data/ContestantPersonalData.csv"

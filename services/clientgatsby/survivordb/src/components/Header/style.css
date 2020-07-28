@@ -1,0 +1,173 @@
+.header {
+  align-items: center;
+  justify-content: center;
+  background-color: 80px;
+  display: flex;
+  height: 80px;
+  position: relative;
+  top: 0;
+  width: 100%;
+  align-items: center;
+
+  :global(a.logoType) {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    color: #3e3e3c;
+    .logo {
+      flex-shrink: 0;
+    }
+  }
+
+  &.homepage {
+    position: absolute;
+    background-color: transparent;
+    height: 100px;
+  }
+}
+
+h1 {
+  font-size: 1.35em;
+  font-weight: 400;
+  margin: 0 0 5px 0;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 0.8em;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.logo {
+  border-radius: 65% 75%;
+  border: 1px solid #eee;
+  display: inline-block;
+  height: 44px;
+  margin: 0 20px 0 0;
+  overflow: hidden;
+  width: 44px;
+  transition: all 0.5s;
+
+  .homepage & {
+    height: 60px;
+    width: 60px;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.sensor {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  height: 1px;
+  top: 100px;
+}
+
+@from-width tablet {
+  .header {
+    padding: 40px;
+
+    &.homepage {
+      height: 100px;
+    }
+  }
+}
+
+@below desktop {
+  .header.homepage {
+    .logo {
+      border: none;
+    }
+
+    :global(a.logoType),
+    h1 {
+      color: #ffffff;
+    }
+    h2 {
+      color: #dddbda;
+    }
+  }
+}
+
+@from-width desktop {
+  .header {
+    align-items: center;
+    background-color: #ffffff;
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    justify-content: space-between;
+    transition: padding 0.5s;
+
+    &.fixed {
+      height: 50px;
+      background-color: #ffffff;
+      left: 0;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+
+      h1 {
+        margin: 0 0 2px 0;
+      }
+
+      h2 {
+        display: none;
+      }
+    }
+
+    &.homepage:not(.fixed) {
+      :global(a.logoType),
+      h1 {
+        color: #ffffff;
+      }
+      h2 {
+        color: #dddbda;
+      }
+    }
+  }
+
+  .header :global(a.logoType) {
+    text-align: left;
+    flex-direction: row;
+    flex-shrink: 0;
+    width: auto;
+  }
+
+  .logo {
+    margin: 0 20px 0 0;
+
+    .fixed & {
+      height: 36px;
+      width: 36px;
+    }
+
+    .header.homepage:not(.fixed) & {
+      border: none;
+    }
+  }
+
+  h2 {
+    animation-duration: 0.5s;
+    animation-name: h2Entry;
+  }
+
+  @keyframes h2Entry {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
