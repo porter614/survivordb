@@ -39,6 +39,7 @@ appearance = appearance_namespace.model(
         "tribalCouncilAppearances": fields.Integer(),
         "juryVotesReceived": fields.Integer(),
         "daysPlayed": fields.Integer(),
+        "didNotFinish": fields.Boolean(),
         "place": fields.Integer(),
         "rank": fields.Float(),
         "idols": fields.List(fields.Integer(attribute="id")),

@@ -36,3 +36,13 @@ class Season(db.Model):
     location = db.Column(db.String(256), default="unknown", nullable=False)
     startDate = db.Column(db.DateTime, default=func.now(), nullable=False)
 
+    finalists = db.Column(db.Integer, nullable=False)
+    idols_in_game = db.Column(db.Integer, nullable=False)
+    jury_size = db.Column(db.Integer, nullable=False)
+    average_player_score = db.Column(db.Integer, nullable=False)
+    purple_rock_ranking = db.Column(db.Integer, nullable=False)
+    returnees = db.Column(db.Integer, nullable=False)
+    dnfs = db.Column(db.Integer, nullable=False)
+
+    logo = db.Column(db.String(256), default="unknown", nullable=False)
+

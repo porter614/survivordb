@@ -15,8 +15,16 @@ contestant = season_namespace.model(
     {
         "id": fields.Integer(readOnly=True),
         "order": fields.Integer(),
-        "contestants": fields.List(fields.String(attribute="name")),
-        # "appearances": fields.List(fields.Integer(attribute="id"))
+        "title": fields.String(),
+        "contestants": fields.List(fields.String(attribute="id")),
+        "finalists": fields.Integer(),
+        "idols_in_game": fields.Integer(),
+        "jury_size": fields.Integer(),
+        "average_player_score": fields.Float(),
+        "purple_rock_ranking": fields.Integer(),
+        "logo": fields.String(),
+        "returnees": fields.Integer(),
+        "dnfs": fields.Integer(),
     },
 )
 

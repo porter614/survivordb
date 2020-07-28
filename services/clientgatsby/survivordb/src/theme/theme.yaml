@@ -79,7 +79,7 @@ font:
     l: &font-size-l 1.7em
     xl: &font-size-xl 2em
     xxl: &font-size-xl 2.2em
-    xxxl: &font-size-xxl 2.8em
+    xxxl: &font-size-xxl 20vw
   lineHeight:
     xs: &font-line-height-xs 1.1
     s: &font-line-height-s 1.2
@@ -132,9 +132,10 @@ icon:
 hero:
   h1:
     size: *font-size-xxl
+    family: Survivants
     color: *color-white
     lineHeight: *font-line-height-xs
-  background: "linear-gradient(0deg, #E0306E, #6438B5)"
+  background: "island.jpg"
 blog:
   h1:
     size: *font-size-l
@@ -145,3 +146,4 @@ header:
     default: 80px
     fixed: 50px;
     homepage: 100px;
+  color: "#2c424d"

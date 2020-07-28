@@ -19,6 +19,8 @@ from tools.goliath import (
     get_contestant_personal_data_from_csv,
     generate_idols,
     eval_race_gender,
+    enrich_season_models,
+    enrich_set_returnees,
 )
 from tools.goliath import download_season_data
 from collections import defaultdict
@@ -90,6 +92,13 @@ def seed_survivor():
         db.session.add(appearance)
 
     for season in seasons.values():
+        enrich_season_models(season)
+        db.session.add(season)
+
+    db.session.commit()
+
+    for season in seasons.values():
+        enrich_set_returnees(season)
         db.session.add(season)
 
     db.session.commit()
@@ -110,9 +119,9 @@ def seed_jeff():
     db.session.commit()
 
 
-# @cli.command("download_survivor")
-# def cli_download_season_data():
-#     download_season_data()
+@cli.command("surivor_seasons")
+def cli_download_season_data():
+    generate_season_models()
 
 
 @cli.command("fetch_photos")

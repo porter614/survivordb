@@ -45,7 +45,7 @@ class Appearance(db.Model):
     daysPlayed = db.Column(db.Float, nullable=False)
     place = db.Column(db.Integer, nullable=False)
     season = db.Column(db.Integer, nullable=False)
-
+    didNotFinish = db.Column(db.Boolean, nullable=False)
     # score/rank
     rank = db.Column(db.Float, nullable=False)
 

@@ -67,10 +67,7 @@ class Header extends React.Component {
             )}
           </FontLoadedContext.Consumer>
         </header>
-        <VisibilitySensor
-          partialVisibility="true"
-          onChange={this.visibilitySensorChange}
-        >
+        <VisibilitySensor onChange={this.visibilitySensorChange}>
           <div className="sensor" />
         </VisibilitySensor>
       </React.Fragment>

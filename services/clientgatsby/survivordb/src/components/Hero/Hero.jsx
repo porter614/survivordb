@@ -14,9 +14,7 @@ const Hero = props => {
           style={{
             fontFamily: "Survivants",
             fontSize: "8vw",
-            paddingBottom: "1vw",
             textAlign: "center",
-            margin: "0 0 40px 0",
             color: "#ffffff",
             lineHeight: 1.1,
             textRemoveGap: 'both 0 "Open Sans"',
@@ -25,7 +23,23 @@ const Hero = props => {
         >
           Survivor<strong>DB</strong>
         </h1>
-        <button onClick={scrollToContent} aria-label="scroll">
+        <h2
+          style={{
+            fontFamily: "Survivants",
+            fontSize: "1vw",
+            fontStyle: "italic",
+            color: "#CFCFCE",
+            textShadow: "#000 0px 0px 20px",
+            paddingBottom: "1vw"
+          }}
+        >
+          A database for all things Survivor
+        </h2>
+        <button
+          onClick={scrollToContent}
+          aria-label="scroll"
+          className="heroButton"
+        >
           <FaArrowDown />
         </button>
       </section>
@@ -36,8 +50,15 @@ const Hero = props => {
           align-items: center;
           background: ${theme.hero.background};
           background-image: url(${backgrounds.desktop});
-          background-size: 100% auto;
-          background-position: fixed;
+          background-size: cover;
+          color: ${theme.text.color.primary.inverse};
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: center;
+          min-height: 100vh;
+          height: 100px;
+          padding: ${theme.space.inset.l};
+          padding-top: ${theme.header.height.homepage};
         }
       `}</style>
     </React.Fragment>

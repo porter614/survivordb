@@ -1,6 +1,7 @@
 import csv
 import os
 import re
+import sys
 import gspread
 from collections import defaultdict
 import urllib
@@ -13,6 +14,8 @@ from project.api.appearances.models import Appearance
 from project.api.contestants.models import Contestant
 from project.api.idols.models import Idol
 from oauth2client.service_account import ServiceAccountCredentials
+from project.api.seasons.models import Season
+import itertools
 
 config = Config()
 client = boto3.client("s3", region_name="us-west-2")
@@ -37,6 +40,7 @@ field_map = {
     "Days": "daysPlayed",
     "Place": "place",
     "SurvAv": "rank",
+    "DNF": "didNotFinish",
 }
 
 idol_field_map = {
@@ -63,6 +67,12 @@ def read_survivor_data(path):
         reader = csv.DictReader(data)
         reader.fieldnames[0] = "Name"
         for index, row in enumerate(reader):
+            if "*" in row["Name"]:
+                print("TRIP", row["Name"])
+                row["DNF"] = True
+            else:
+                row["DNF"] = False
+
             row["Name"] = re.sub(r"[^a-zA-Z ]+", "", row["Name"])
             if not row["Days"]:
                 break
@@ -402,6 +412,92 @@ def get_contestant_personal_data_from_csv(name):
         for _, row in enumerate(reader):
             if row["name"] == name:
                 return (row["birthdate"], row["occupation"].split(";"), row["hometown"])
+
+
+def get_purple_rock_rankings():
+    base_url = "http://www.purplerockpodcast.com/survivor-season-rankings-spoiler-free-summaries/"
+    resp = requests.get(base_url, headers={"User-Agent": "curl"}).text
+    soup = BeautifulSoup(resp, "html.parser")
+    try:
+        seasons = list(map(lambda span: span.text, soup.findAll(["strong", "b"])))
+        seasons = list(
+            map(
+                lambda s: [
+                    tuple(
+                        reversed(
+                            next(
+                                iter(re.findall(r"(\d{1,2}).*season (\d{1,2})", s)), ()
+                            )
+                        )
+                    )
+                ],
+                seasons,
+            )
+        )[:40]
+
+        return dict(itertools.chain(*seasons))
+    except Exception as e:
+        print(e)
+        return
+
+
+purple_rock_rankings = get_purple_rock_rankings()
+
+
+def enrich_season_models(season):
+    data_folder = config.primary["DATA_PATH"]
+    all_appearances = []
+
+    file_name_split = []
+    for file_name in os.listdir(data_folder):
+        file_path = os.path.join(data_folder, file_name)
+
+        if os.path.isfile(file_path):
+            file_name_split = file_name.split(" ")
+
+            season_order = file_name_split[0].split("S")[1].replace(":", "")
+            if int(season_order) == int(season.order):
+                break
+
+    n = len(file_name_split)
+    final_n = 0
+    idols_found = 0
+    average_score = 0
+    dnfs = 0
+    for appearance in season.appearances:
+        if float(appearance.daysPlayed) >= 39:
+            final_n += 1
+
+        idols_found += len(appearance.idols)
+        average_score += float(appearance.rank) / 18 * 100
+
+        if appearance.didNotFinish:
+            dnfs += 1
+
+    season_name = " ".join(file_name_split[1:n]).split(".")[0]
+    jury_size = next(read_survivor_data(file_path))["TotJ"]
+    average_score = round(average_score / len(season.appearances), 2)
+    purple_rock_ranking = purple_rock_rankings[str(season.order)]
+    season.title = season_name
+    season.finalists = final_n
+    season.jury_size = jury_size
+    season.average_player_score = average_score
+    season.purple_rock_ranking = purple_rock_ranking
+    season.idols_in_game = idols_found
+    season.dnfs = dnfs
+    season.returnees = 0
+    season.logo = f"https://survivordb.s3-us-west-2.amazonaws.com/{season.order}.jpg"
+
+
+def enrich_set_returnees(season):
+    returnees = 0
+    for appearance in season.appearances:
+        for player_season in appearance.contestant.seasons:
+            if int(player_season.order) < int(season.order):
+                returnees += 1
+                break
+
+    season.returnees = returnees
 
 
 if __name__ == "__main__":

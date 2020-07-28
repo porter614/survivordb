@@ -5,6 +5,7 @@ import { FaHome } from "react-icons/fa/"
 import { GrGraphQl } from "react-icons/gr/"
 import { GiFireBowl, GiSolarTime } from "react-icons/gi/"
 import { IoIosPeople } from "react-icons/io/"
+import { GoRequestChanges } from "react-icons/go"
 
 import Item from "./Item"
 import Expand from "./Expand"
@@ -20,7 +21,8 @@ class Menu extends React.Component {
       { to: "/seasons/", label: "Seasons", icon: GiSolarTime },
       { to: "/players/", label: "Players", icon: IoIosPeople },
       { to: "/versus/", label: "Versus", icon: GiFireBowl },
-      { to: "/graph/", label: "Connections", icon: GrGraphQl }
+      { to: "/graph/", label: "Connections", icon: GrGraphQl },
+      { to: "/contact/", label: "Request Features ", icon: GoRequestChanges }
     ]
 
     this.renderedItems = [] // will contain references to rendered DOM elements of menu

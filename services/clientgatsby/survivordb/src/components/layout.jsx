@@ -26,7 +26,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <img
-        src="https://www.venturefiji.com/wp-content/uploads/2015/12/laucala-island-resort-Laucala-Island-Aerial-South-Coast-2.jpg"
+        src="https://parade.com/wp-content/uploads/2020/01/Survivor-40-Cast.jpg"
         alt="bg"
         style={{
           height: "auto",

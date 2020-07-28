@@ -6,6 +6,8 @@ import { graphql } from "gatsby"
 import { ThemeContext, Layout } from "../layouts"
 import Hero from "../components/Hero"
 import Seo from "../components/SEO"
+import FeatureCard from "../components/Feature/featureCard"
+import FeatureContainer from "../components/Feature/featureContainer"
 
 class IndexPage extends React.Component {
   separator = React.createRef()
@@ -18,50 +20,21 @@ class IndexPage extends React.Component {
   }
 
   render() {
-    console.log(this.props)
-    const {
-      data: {
-        bgDesktop: {
-          resize: { src: desktop }
-        },
-        bgTablet: {
-          resize: { src: tablet }
-        },
-        bgMobile: {
-          resize: { src: mobile }
-        }
-      }
-    } = this.props
-
-    const backgrounds = {
-      desktop,
-      tablet,
-      mobile
-    }
-    console.log(`url("${backgrounds.desktop}")`)
     return (
       <React.Fragment>
         <ThemeContext.Consumer>
           {theme => (
             <Hero
               scrollToContent={this.scrollToContent}
-              backgrounds={backgrounds}
-              theme={theme}
-              style={{
-                backgroundImage: `url(${backgrounds.desktop})`
-              }}
+              backgrounds={theme.backgrounds}
+              theme={theme.theme}
             />
           )}
         </ThemeContext.Consumer>
 
         <hr ref={this.separator} />
 
-        <style jsx>{`
-          hr {
-            margin: 0;
-            border: 0;
-          }
-        `}</style>
+        <FeatureContainer />
       </React.Fragment>
     )
   }
@@ -70,53 +43,5 @@ class IndexPage extends React.Component {
 IndexPage.propTypes = {
   data: PropTypes.object.isRequired
 }
-
-export const query = graphql`
-  query IndexQuery {
-    bgDesktop: imageSharp(fluid: { originalName: { regex: "/island/" } }) {
-      resize(width: 1200, quality: 90, cropFocus: CENTER) {
-        src
-      }
-    }
-    bgTablet: imageSharp(fluid: { originalName: { regex: "/island/" } }) {
-      resize(width: 800, height: 1100, quality: 90, cropFocus: CENTER) {
-        src
-      }
-    }
-    bgMobile: imageSharp(fluid: { originalName: { regex: "/island/" } }) {
-      resize(width: 450, height: 850, quality: 90, cropFocus: CENTER) {
-        src
-      }
-    }
-  }
-`
-
-// const IndexPage = () => (
-//   <Layout>
-//     <SEO title="Home" />
-//     <div align="center">
-//       <h1
-//         className="title is-1"
-//         style={{
-//           fontFamily: "Survivants",
-//           color: "#74c7e3",
-//           fontSize: "200px",
-//           textShadow: "#000 0px 0px 10px",
-//         }}
-//       >
-//         Survivor.DB
-//       </h1>
-//       <h2 className="title is-3" style={{ color: "white" }}>
-//         Under construction
-//       </h2>
-//       <hr />
-//       <br />
-//       <p style={{ color: "white" }}>
-//         A database for all things survivor. Spoilers ahead.
-//       </p>
-//     </div>
-//     )} />
-//   </Layout>
-// )
 
 export default IndexPage

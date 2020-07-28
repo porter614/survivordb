@@ -11,35 +11,35 @@ import ExtraContestantStatistic from "./ContestantKeyValue"
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   paper: {
     padding: theme.spacing(1),
     background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
     padding: "10px",
     maxWidth: "100%",
-    margin: "20px",
+    margin: "20px"
   },
   image: {
     width: 256,
-    height: 256,
+    height: 256
   },
   img: {
     margin: "auto",
     display: "block",
     maxWidth: "100%",
-    maxHeight: "100%",
+    maxHeight: "100%"
   },
   extraStatKey: {
     display: "inline-block",
     fontWeight: "bold",
-    padding: theme.spacing(1),
+    padding: theme.spacing(1)
   },
   extraStatValue: {
     display: "inline-block",
     padding: "10px",
-    padding: theme.spacing(1),
-  },
+    padding: theme.spacing(1)
+  }
 }))
 
 const nth = {
@@ -62,7 +62,7 @@ const nth = {
   17: "17th",
   18: "18th",
   19: "19th",
-  20: "20th",
+  20: "20th"
 }
 
 const ContestantToggle = props => {
@@ -78,20 +78,16 @@ const ContestantToggle = props => {
                   {nth[props.appearance.place]}
                 </Typography>
               </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonBase>
-                <img
-                  className={classes.img}
-                  alt="complex"
-                  src={`https://survivordb.s3-us-west-2.amazonaws.com/${props.appearance.season}.jpg`}
-                  style={{
-                    objectFit: "cover",
-                    width: "400px",
-                    height: "100%",
-                  }}
-                />
-              </ButtonBase>
+              <img
+                className={classes.img}
+                alt="complex"
+                src={`https://survivordb.s3-us-west-2.amazonaws.com/${props.appearance.season}.jpg`}
+                style={{
+                  objectFit: "cover",
+                  width: "40vh",
+                  height: "100%"
+                }}
+              />
             </Grid>
           </Grid>
           <Grid item xs={9}>
@@ -179,7 +175,7 @@ const ContestantToggle = props => {
 
 // new
 ContestantToggle.propTypes = {
-  appearance: PropTypes.any.isRequired,
+  appearance: PropTypes.any.isRequired
 }
 
 export default ContestantToggle

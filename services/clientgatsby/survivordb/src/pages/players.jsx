@@ -4,7 +4,6 @@ import axios from "axios"
 import MaterialTable, { MTableToolbar } from "material-table"
 
 import { createMuiTheme } from "@material-ui/core/styles"
-import { ThemeProvider } from "@material-ui/styles"
 import { makeStyles } from "@material-ui/core/styles"
 
 import AddBox from "@material-ui/icons/AddBox"
@@ -29,7 +28,7 @@ import Select from "@material-ui/core/Select"
 import InputLabel from "@material-ui/core/InputLabel"
 
 import "./mystyles.scss"
-import Layout from "../components/layout"
+import { ThemeContext, Layout } from "../layouts"
 import SEO from "../components/seo"
 
 const tableIcons = {
@@ -74,15 +73,15 @@ const headCells = [
     title: "Avatar",
     render: rowData => (
       <img
-        src={rowData.profile_image_link}
-        border="1px solid"
-        box-shadow="50px 50px 113px"
-        transition="all .2s ease"
-        vertical-align="middle"
+        src={rowData.image_link}
+        display="block"
+        margin-left="auto"
+        margin-right="auto"
         style={{
-          width: 50,
+          width: "5vw",
+          height: "auto",
           borderColor: "#74c7e3",
-          borderRadius: "50%"
+          borderRadius: "100%"
         }}
       />
     ),
@@ -182,7 +181,8 @@ const headCells = [
     disablePadding: false,
     title: "Idols Found",
     render: (rowData, renderType) => rowData.idols.length,
-    customFilterAndSearch: (term, rowData) => term <= rowData.idols.length,
+    customFilterAndSearch: (term, rowData) =>
+      parseInt(term) <= rowData.idols.length,
     customSort: (a, b) => a.idols.length - b.idols.length
   }
 ]
@@ -288,93 +288,109 @@ const ContestantsTable = props => {
   }, [state])
 
   return (
-    <Layout>
-      <SEO title="Players" />
-      <div align="center">
-        <h1
-          className="title is-1"
-          style={{
-            fontFamily: "Survivants",
-            color: "#74c7e3",
-            textShadow: "#000 0px 0px 10px"
-          }}
-        >
-          Survivor Players
-        </h1>
-        <hr />
-        <br />
-        {/* <ThemeProvider theme={theme}> */}
-        <MaterialTable
-          style={{
-            zoom: "67%"
-          }}
-          icons={tableIcons}
-          showTitle={false}
-          title=" "
-          columns={data.headers}
-          data={data.rows}
-          options={{
-            // tableLayout: "fixed",
-            grouping: true,
-            filtering: true,
-            sorting: true,
-            doubleHorizontalScroll: true,
-            columnsButton: true,
-            pageSize: 25,
-            pageSizeOptions: [5, 10, 25, 50, 100],
-            toolbarButtonAlignment: "right",
-            thirdSortClick: false,
-            searchFieldStyle: {
-              width: "100%"
-            },
-            headerStyle: {
-              position: "sticky",
-              top: 0,
-              backgroundColor: "#01579b",
-              color: "#FFF",
-              fontFamily: "Survivants",
-              zIndex: 1
-            },
-            rowStyle: (rowData, index) => ({
-              backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
-              fontFamily: "Verdana"
-            })
-          }}
-          detailPanel={rowData => {
-            return <ContestantToggle appearance={rowData} />
-          }}
-          onRowClick={(event, rowData, togglePanel) => togglePanel()}
-          components={{
-            Toolbar: props => (
-              <div align="right">
-                <MTableToolbar {...props} />
-                <div style={{ padding: "0px 10px" }}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="age-native-simple">Type</InputLabel>
-                    <Select
-                      native
-                      value={state}
-                      onChange={handleChange}
-                      inputProps={{
-                        name: "age",
-                        id: "age-native-simple"
-                      }}
-                    >
-                      <option aria-label="None" value="" />
-                      <option value="Individual Appearance">
-                        Individual Appearance
-                      </option>
-                      <option value="Career">Career</option>
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-            )
-          }}
-        />
-        {/* </ThemeProvider> */}
-      </div>
-    </Layout>
+    <React.Fragment>
+      <ThemeContext.Consumer>
+        {theme => (
+          <section
+            className="section"
+            style={{
+              backgroundImage: `url("${theme.backgrounds.desktop}")`,
+              backgroundSize: "100%"
+              // height: "100%"
+            }}
+          >
+            <SEO title="Players" />
+            <div align="center">
+              <h1
+                // className="title is-1"
+                style={{
+                  fontFamily: "Survivants",
+                  color: "#ffffff",
+                  fontSize: "4vw",
+                  textShadow: "#000 0px 0px 10px",
+                  padding: "20px"
+                }}
+              >
+                Players
+              </h1>
+              <hr />
+              <br />
+              {/* <ThemeProvider theme={theme}> */}
+              <MaterialTable
+                style={{
+                  zoom: "67%"
+                }}
+                icons={tableIcons}
+                showTitle={false}
+                title=" "
+                columns={data.headers}
+                data={data.rows}
+                options={{
+                  // tableLayout: "fixed",
+                  grouping: true,
+                  filtering: true,
+                  sorting: true,
+                  doubleHorizontalScroll: true,
+                  columnsButton: true,
+                  pageSize: 25,
+                  pageSizeOptions: [5, 10, 25, 50, 100],
+                  toolbarButtonAlignment: "right",
+                  thirdSortClick: false,
+                  searchFieldStyle: {
+                    width: "100%"
+                  },
+                  headerStyle: {
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: theme.theme.header.color,
+                    color: "#FFF",
+                    fontFamily: "Survivants",
+                    zIndex: 1
+                  },
+                  rowStyle: (rowData, index) => ({
+                    backgroundColor: index % 2 === 0 ? "#EEE" : "#FFF",
+                    fontFamily: "Verdana"
+                  })
+                }}
+                detailPanel={rowData => {
+                  return <ContestantToggle appearance={rowData} />
+                }}
+                onRowClick={(event, rowData, togglePanel) => togglePanel()}
+                components={{
+                  Toolbar: props => (
+                    <div align="right">
+                      <MTableToolbar {...props} />
+                      <div style={{ padding: "0px 10px" }}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel htmlFor="age-native-simple">
+                            Type
+                          </InputLabel>
+                          <Select
+                            native
+                            value={state}
+                            onChange={handleChange}
+                            inputProps={{
+                              name: "age",
+                              id: "age-native-simple"
+                            }}
+                          >
+                            <option aria-label="None" value="" />
+                            <option value="Individual Appearance">
+                              Individual Appearance
+                            </option>
+                            <option value="Career">Career</option>
+                          </Select>
+                        </FormControl>
+                      </div>
+                    </div>
+                  )
+                }}
+              />
+            </div>
+          </section>
+        )}
+      </ThemeContext.Consumer>
+    </React.Fragment>
   )
 }
 

@@ -97,32 +97,64 @@ class Layout extends React.Component {
     return (
       <StaticQuery
         query={graphql`
-          query LayoutQuery {
-            site {
-              id
+          query IndexQuery {
+            bgDesktop: imageSharp(
+              fluid: { originalName: { regex: "/island/" } }
+            ) {
+              resize(width: 1200, quality: 90, cropFocus: CENTER) {
+                src
+              }
+            }
+            bgTablet: imageSharp(
+              fluid: { originalName: { regex: "/island/" } }
+            ) {
+              resize(width: 800, height: 1100, quality: 90, cropFocus: CENTER) {
+                src
+              }
+            }
+            bgMobile: imageSharp(
+              fluid: { originalName: { regex: "/island/" } }
+            ) {
+              resize(width: 450, height: 850, quality: 90, cropFocus: CENTER) {
+                src
+              }
             }
           }
         `}
         render={data => {
+          console.log(data)
+          const {
+            bgDesktop: {
+              resize: { src: desktop }
+            },
+            bgTablet: {
+              resize: { src: tablet }
+            },
+            bgMobile: {
+              resize: { src: mobile }
+            }
+          } = data
+
+          const backgrounds = {
+            desktop,
+            tablet,
+            mobile
+          }
           const { children } = this.props
 
           return (
-            <ThemeContext.Provider value={this.state.theme}>
+            <ThemeContext.Provider
+              value={{ theme: this.state.theme, backgrounds: backgrounds }}
+            >
               <FontLoadedContext.Provider value={this.state.font400loaded}>
                 <ScreenWidthContext.Provider value={this.state.screenWidth}>
                   <React.Fragment>
                     <Header
                       path={this.props.location.pathname}
                       theme={this.state.theme}
+                      style={{ margin: "auto" }}
                     />
                     <main>{children}</main>
-
-                    {/* --- STYLES --- */}
-                    <style jsx>{`
-                      main {
-                        min-height: 800vh;
-                      }
-                    `}</style>
                   </React.Fragment>
                 </ScreenWidthContext.Provider>
               </FontLoadedContext.Provider>

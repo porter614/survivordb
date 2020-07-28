@@ -28,7 +28,7 @@ h1 {
   }
 }
 
-button {
+.heroButton {
   background: #709425;
   border: 0;
   border-radius: 50%;
