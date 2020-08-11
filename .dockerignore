@@ -4,7 +4,7 @@ Dockerfile.deploy
 services/users/htmlcov
 services/users/.coverage
 services/users/data/
-
+node_modules
 services/client/node_modules
 services/client/coverage
 services/client/build

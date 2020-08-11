@@ -25,5 +25,8 @@ RUN pip install -r requirements-dev.txt
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
 
+ARG NO_REPLY_PASSWORD
+ENV NO_REPLY_PASSWORD $NO_REPLY_PASSWORD
+
 # add app
 COPY . /usr/src/app

@@ -12,6 +12,7 @@ class BaseConfig:
     # new
     ACCESS_TOKEN_EXPIRATION = 900  # 15 minutes
     REFRESH_TOKEN_EXPIRATION = 2592000  # 30 days
+    NO_REPLY_PASSWORD = os.environ.get("NO_REPLY_PASSWORD")
 
 
 class DevelopmentConfig(BaseConfig):

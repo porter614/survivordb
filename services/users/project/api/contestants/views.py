@@ -7,7 +7,7 @@ from flask_restx import Resource, fields, Namespace
 from project.api.contestants.crud import get_all_contestants, get_contestant_by_id
 from project.api.appearances.crud import get_appearance_by_ids
 from project.api.appearances.views import appearance
-from collections import Counter
+from collections import Counter, defaultdict, OrderedDict
 
 contestant_namespace = Namespace("contestants")
 
@@ -174,19 +174,36 @@ class Career(Resource):
 
 
 class PlayerNames(Resource):
-    # @contestant_namespace.marshal_with(player_name, as_list=True)
     def get(self):
         """Returns all users."""
-        # return get_all_contestants(**request.args), 200
-        return (
-            dict(
-                map(
-                    lambda contestant: (contestant.name, contestant.id),
-                    get_all_contestants(**request.args),
-                )
-            ),
-            200,
-        )
+        d = defaultdict(dict)
+        res = OrderedDict()
+        contestants = get_all_contestants(**request.args)
+
+        for contestant in contestants:
+            for season in contestant.seasons:
+                d[int(season.order)][contestant.id] = contestant.name
+
+        for i in range(1, 41):
+            res[i] = d[i]
+        # return (
+        #     dict(
+        #         map(
+        #             lambda contestant: (
+        #                 contestant.id,
+        #                 {
+        #                     "name": contestant.name,
+        #                     "seasons": list(
+        #                         map(lambda season: season.order, contestant.seasons)
+        #                     ),
+        #                 },
+        #             ),
+        #             get_all_contestants(**request.args),
+        #         )
+        #     ),
+        #     200,
+        # )
+        return res, 200
 
 
 contestant_namespace.add_resource(ContestantList, "")

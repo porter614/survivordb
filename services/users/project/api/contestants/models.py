@@ -18,6 +18,7 @@ class Contestant(db.Model):
     birthdate = db.Column(db.DateTime, default=func.now(), nullable=False)
     _occupation = db.Column(db.String(256), default="", nullable=False)
     hometown = db.Column(db.String(256), default="unknown", nullable=False)
+    # TODO: remove this attribute
     season_id = db.Column(db.Integer, db.ForeignKey("seasons.id"))
 
     @property

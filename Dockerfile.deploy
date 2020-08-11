@@ -18,6 +18,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV FLASK_ENV=production
 ENV APP_SETTINGS=project.config.ProductionConfig
+ARG NO_REPLY_PASSWORD
+ENV NO_REPLY_PASSWORD $NO_REPLY_PASSWORD
+
 WORKDIR /app
 RUN apk update && \
   apk add --no-cache --virtual build-deps \

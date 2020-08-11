@@ -11,3 +11,8 @@ def get_all_contestants(*args, **kwargs):
 
 def get_contestant_by_id(contestant_id):
     return Contestant.query.filter_by(id=contestant_id).first()
+
+
+# def get_all_contestants_by_season(*args, **kwargs):
+#     return db.session.
+
