@@ -1,67 +1,67 @@
 version: "3.7"
 
-services:
-  users:
-    build:
-      context: ./services/users
-      dockerfile: Dockerfile
-    entrypoint: ["/usr/src/app/entrypoint.sh"]
-    volumes:
-      - "./services/users:/usr/src/app"
-    ports:
-      - 5001:5000
-    environment:
-      - FLASK_ENV=development
-      - APP_SETTINGS=project.config.DevelopmentConfig
-      - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users_dev
-      - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_dev
-      - SQLALCHEMY_RECORD_QUERIES=true
-      - NO_REPLY_PASSWORD=${NO_REPLY_PASSWORD}
-    depends_on:
-      - users-db
-
-  users-db:
-    build:
-      context: ./services/users/project/db
-      dockerfile: Dockerfile
-    ports:
-      - 5433:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-  # client:
-  #   build:
-  #     context: ./services/client
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./services/client:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - 3007:3000
-  #   environment:
-  #     - NODE_ENV=development
-  #     - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
-  #   depends_on:
-  #     - users
-  #   stdin_open: true
 # services:
 #   users:
 #     build:
-#       context: .
-#       dockerfile: ./services/users/Dockerfile.deploy
+#       context: ./services/users
+#       dockerfile: Dockerfile
 #     entrypoint: ["/usr/src/app/entrypoint.sh"]
 #     volumes:
 #       - "./services/users:/usr/src/app"
-#       - ./services/client:/usr/src/app/client
-#       - /usr/src/app/node_modules
 #     ports:
 #       - 5001:5000
-#       - 3007:3000
 #     environment:
 #       - FLASK_ENV=development
 #       - APP_SETTINGS=project.config.DevelopmentConfig
-#       - DATABASE_URL=postgresql://postgres:survivordb@database-1.cfeinen7jigb.us-west-2.rds.amazonaws.com:5432
-#       - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
-#       - NODE_ENV=development
-#       - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
-#     stdin_open: true
+#       - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users_dev
+#       - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_dev
+#       - SQLALCHEMY_RECORD_QUERIES=true
+#       - NO_REPLY_PASSWORD=${NO_REPLY_PASSWORD}
+#     depends_on:
+#       - users-db
+
+#   users-db:
+#     build:
+#       context: ./services/users/project/db
+#       dockerfile: Dockerfile
+#     ports:
+#       - 5433:5432
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#   # client:
+#   #   build:
+#   #     context: ./services/client
+#   #     dockerfile: Dockerfile
+#   #   volumes:
+#   #     - ./services/client:/usr/src/app
+#   #     - /usr/src/app/node_modules
+#   #   ports:
+#   #     - 3007:3000
+#   #   environment:
+#   #     - NODE_ENV=development
+#   #     - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+#   #   depends_on:
+#   #     - users
+#   #   stdin_open: true
+services:
+  users:
+    build:
+      context: .
+      dockerfile: ./services/users/Dockerfile.deploy
+    entrypoint: ["/usr/src/app/entrypoint.sh"]
+    volumes:
+      - "./services/users:/usr/src/app"
+      - ./services/client:/usr/src/app/client
+      - /usr/src/app/node_modules
+    ports:
+      - 5001:5000
+      - 3007:3000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://tujeuksjfwyntb:73a5a6e7a15c314903de28cf8a5deeed1da3813d0d2aa73d0988011f7092298f@ec2-52-204-232-46.compute-1.amazonaws.com:5432/d3ptt9o9rbm78l
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
+      - NODE_ENV=development
+      - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+    stdin_open: true
