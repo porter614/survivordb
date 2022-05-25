@@ -7,7 +7,7 @@ psycopg2-binary==2.8.4
 werkzeug==0.16.1
 flask-cors==3.0.8
 flask-bcrypt==0.7.1
-pyjwt==1.7.1
+pyjwt==2.4.0
 marshmallow==3.6.1
 gspread==3.6.0
 bs4==0.0.1
